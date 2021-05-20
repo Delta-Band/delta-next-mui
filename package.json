@@ -1,0 +1,19 @@
+{
+  "name": "delta-next-mui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Delta-Band/delta-next-mui.git"
+  },
+  "author": "ofer sarid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Delta-Band/delta-next-mui/issues"
+  },
+  "homepage": "https://github.com/Delta-Band/delta-next-mui#readme"
+}
