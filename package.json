@@ -1,10 +1,11 @@
 {
-  "name": "delta-next-mui",
-  "version": "1.0.0",
+  "name": "@deltaband/delta-next-mui",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "npm-publish": "npm publish --access public"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,35 @@
   "bugs": {
     "url": "https://github.com/Delta-Band/delta-next-mui/issues"
   },
-  "homepage": "https://github.com/Delta-Band/delta-next-mui#readme"
+  "homepage": "https://github.com/Delta-Band/delta-next-mui#readme",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@n8tb1t/use-scroll-position": "^2.0.3",
+    "disable-scroll": "^0.6.0",
+    "emailjs-com": "^2.6.4",
+    "framer-motion": "^3.6.2",
+    "gsap": "^3.6.0",
+    "next": "10.0.7",
+    "react": "17.0.1",
+    "react-activity": "^1.2.2",
+    "react-browser-hooks": "^2.2.4",
+    "react-dom": "17.0.1",
+    "react-intersection-observer": "^8.31.0",
+    "react-render-html": "^0.6.0",
+    "react-swipeable": "^6.0.1",
+    "resize-observer-polyfill": "^1.5.1",
+    "styled-components": "^5.3.0",
+    "styled-icons": "^10.33.0",
+    "use-click-outside": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-react": "^7.13.13",
+    "babel-loader": "^8.2.2",
+    "source-map-loader": "^2.0.2",
+    "terser-webpack-plugin": "^5.1.2",
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.7.0"
+  }
 }
