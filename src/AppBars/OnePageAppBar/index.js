@@ -8,20 +8,21 @@ import React, {
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { motion } from 'framer-motion';
 import TopSection from './TopSection';
 import MenuItem from './MenuItem';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  appBarRoot: {
     position: 'fixed',
     top: 0,
     left: 0,
     width: '100vw',
     zIndex: 10,
-    overflow: 'hidden',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    overflow: 'visible'
   },
   collpasableSection: {
     paddingTop: theme.spacing(5),
@@ -41,15 +42,19 @@ const useStyles = makeStyles((theme) => ({
   },
   collpasableSectionInner: {
     margin: '0 auto',
-    width: '50%',
+    width: '70%',
     maxWidth: 300,
-    paddingBottom: theme.spacing(5)
+    paddingBottom: theme.spacing(5),
+    overflowX: 'hidden',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(2)
   }
 }));
 
 /** CONSTS */
 const MOTION_VARIANTS = {
-  root: (bgOpened, bgClosed) => ({
+  root: (bgOpened, bgClosed, closedHeight) => ({
     opened: {
       height: '100%',
       backgroundColor: bgOpened,
@@ -59,7 +64,7 @@ const MOTION_VARIANTS = {
       }
     },
     closed: {
-      height: 66,
+      height: closedHeight,
       backgroundColor: bgClosed,
       transition: {
         type: 'spring',
@@ -73,17 +78,19 @@ export default function DeltaAppBarWithSCrollIndicator({
   backgroundColor = '#000',
   backgroundColorOpened = '#000',
   forgroundColor = '#FFF',
-  logoHeight = '40%',
-  logoSrc = 'https://delta.band/images/logo.svg',
+  logo,
   menuItems = [],
   menuItemFontVariant = '',
   menuSubItemFontVariant = '',
   positionPathToStore,
-  logoClassName,
+  topSectionClassName,
   store,
-  hoverHeight = 250,
+  closedHeight = 66,
+  className,
   startScrollIndicationFrom = 0,
-  positionTransform = (pos) => pos
+  positionTransform = (pos) => pos,
+  logTrack = false,
+  removeDotconnectorLine = false
 }) {
   /** HOOKS */
   const classes = useStyles();
@@ -132,26 +139,23 @@ export default function DeltaAppBarWithSCrollIndicator({
 
   return (
     <motion.div
-      className={classes.root}
-      variants={MOTION_VARIANTS.root(backgroundColorOpened, backgroundColor)}
+      className={cx(classes.appBarRoot, className)}
+      variants={MOTION_VARIANTS.root(
+        backgroundColorOpened,
+        backgroundColor,
+        closedHeight
+      )}
       initial='closed'
       animate={status}
-      whileHover={{
-        height: hoverHeight,
-        transition: {
-          type: 'spring',
-          damping: 16
-        }
-      }}
       style={{
         backgroundColor
       }}
     >
       <TopSection
         closeMenu={closeMenu}
-        logoSrc={logoSrc}
+        className={topSectionClassName}
+        logo={logo}
         status={status}
-        logoHeight={logoHeight}
         forgroundColor={forgroundColor}
         backgroundColor={backgroundColor}
         positionPathToStore={positionPathToStore}
@@ -159,10 +163,10 @@ export default function DeltaAppBarWithSCrollIndicator({
         toggle={toggle}
         position={positionTransform(position)}
         menuItems={menuItems}
-        logoClassName={logoClassName}
         menuItemFontVariant={menuItemFontVariant}
         startScrollIndicationFrom={startScrollIndicationFrom}
         isOpen={status === 'opened'}
+        logTrack={logTrack}
       />
       {!upMd && (
         <div className={classes.collpasableSection} ref={scrollableContainer}>
@@ -171,6 +175,7 @@ export default function DeltaAppBarWithSCrollIndicator({
               <MenuItem
                 key={item.id}
                 item={item}
+                removeDotconnectorLine={removeDotconnectorLine}
                 forgroundColor={forgroundColor}
                 backgroundColorOpened={backgroundColorOpened}
                 closeMenu={closeMenu}
@@ -190,27 +195,29 @@ DeltaAppBarWithSCrollIndicator.proptypes = {
   backgroundColor: PropTypes.string,
   backgroundColorOpened: PropTypes.string,
   forgroundColor: PropTypes.string.isRequired,
-  logoTransform: PropTypes.string,
   menuItemFontVariant: PropTypes.string,
   menuSubItemFontVariant: PropTypes.string,
-  logoSrc: PropTypes.string,
-  hoverHeight: PropTypes.string,
-  logoClassName: PropTypes.string,
+  logo: PropTypes.node,
+  closedHeight: PropTypes.string,
+  className: PropTypes.string,
+  topSectionClassName: PropTypes.string,
   positionPathToStore: PropTypes.string.isRequired,
   positionTransform: PropTypes.func,
-  logoHeight: PropTypes.oneOf([PropTypes.string, PropTypes.logo]),
   menuItems: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       color: PropTypes.string,
       route: PropTypes.string,
+      id: PropTypes.string.isRequired,
       range: PropTypes.arrayOf,
       subMenu: PropTypes.arrayOf({
         name: PropTypes.string,
-        id: PropTypes.string
+        id: PropTypes.string.isRequired
       })
     })
   ),
   store: PropTypes.any.isRequired,
-  startScrollIndicationFrom: PropTypes.number
+  startScrollIndicationFrom: PropTypes.number,
+  logTrack: PropTypes.bool,
+  removeDotconnectorLine: PropTypes.bool
 };

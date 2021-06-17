@@ -6,7 +6,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Typography } from '@material-ui/core';
 import { useScrollPosition } from '@n8tb1t/use-scroll-position';
-import { ChevronWithCircleDown as ArrowDownIcon } from '@styled-icons/entypo/ChevronWithCircleDown';
+import { Cross as Hamburger } from 'hamburger-react';
 import MenuItem from './MenuItem';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,17 +15,35 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    boxSizing: 'border-box',
+    position: 'relative',
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(2),
-    flexShrink: 0,
+    flexShrink: 0
+  },
+  innerWrap: {
+    height: '100%',
+    width: '100%',
+    margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    boxSizing: 'border-box',
     [theme.breakpoints.up('md')]: {
       alignItems: 'flex-start',
       paddingTop: 20
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: theme.pageMaxWidthLG
+    },
+    [theme.breakpoints.up('xl')]: {
+      maxWidth: theme.pageMaxWidthXL
     }
   },
   logo: {
-    height: '100%'
+    cursor: 'pointer',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center'
   },
   arrowWrapper: {
     height: 28,
@@ -36,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
   topSectionInfo: {
     position: 'absolute',
-    right: theme.spacing(7.5),
+    right: theme.spacing(10),
     width: '40%',
     marginTop: 5
   },
@@ -53,34 +71,23 @@ const useStyles = makeStyles((theme) => ({
   },
   horizontalMenuWrapper: {
     display: 'flex',
-    width: '75vw'
+    width: '100%',
+    paddingLeft: '10vw'
   }
 }));
 
-/** CONSTS */
-const MOTION_VARIANTS = {
-  arrow: {
-    opened: {
-      rotate: '180deg'
-    },
-    closed: {
-      rotate: '0deg'
-    }
-  }
-};
-
 export default function TopSection({
   closeMenu,
-  logoSrc,
-  status,
+  logo,
   forgroundColor,
   toggle,
   position,
   menuItemFontVariant,
   menuItems,
   menuSubItemFontVariant,
-  logoClassName,
-  isOpen
+  isOpen,
+  logTrack = false,
+  className
 }) {
   const classes = useStyles();
   const [item, setItem] = useState();
@@ -91,7 +98,9 @@ export default function TopSection({
     const docHeight =
       document.documentElement.scrollHeight - window.innerHeight;
     const track = Math.max(-currPos.y / docHeight, 0);
-    console.log('track: ', track);
+    if (logTrack) {
+      console.log('track: ', track);
+    }
     setComplete(track);
   });
 
@@ -113,74 +122,77 @@ export default function TopSection({
     return (complete - item.range[0]) / (item.range[1] - item.range[0]);
   }
 
+  function scrollToTop() {
+    document
+      .getElementById('__next')
+      .scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   return (
     <div className={classes.topSection}>
-      <img
-        src={logoSrc}
-        className={cx(classes.logo, logoClassName)}
-        onClick={closeMenu}
-      />
-      {upMd ? (
-        <div className={classes.horizontalMenuWrapper}>
-          {menuItems.map((item, i) => (
-            <MenuItem
-              key={item.id}
-              item={item}
-              forgroundColor={forgroundColor}
-              closeMenu={closeMenu}
-              menuItemFontVariant={menuItemFontVariant}
-              menuSubItemFontVariant={menuSubItemFontVariant}
-              position={position}
-              complete={calcCompletePerItem(item)}
-            />
-          ))}
-        </div>
-      ) : null}
-      {!isOpen && !upMd && (
-        <AnimatePresence>
-          <motion.div
-            className={classes.topSectionInfo}
-            key={item ? item.name : ''}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {item ? (
-              <div
-                className={classes.scrollIndicatorWrapper}
-                style={{ backgroundColor: fade(forgroundColor, 0.5) }}
-              >
-                <motion.div
-                  animate={{
-                    width: `${Math.round(calcCompletePerItem(item) * 100)}%`,
-                    transition: {
-                      duration: 0.25
-                    }
-                  }}
-                  className={classes.scrollIndicator}
-                  style={{ backgroundColor: item.color }}
-                />
-              </div>
-            ) : null}
-            <Typography
-              variant={menuItemFontVariant}
-              style={{ color: forgroundColor }}
-            >
-              {item ? item.name : ''}
-            </Typography>
-          </motion.div>
-        </AnimatePresence>
-      )}
-      {!upMd && (
-        <motion.div
-          variants={MOTION_VARIANTS.arrow}
-          initial='closed'
-          animate={status}
-          className={classes.arrowWrapper}
+      <div className={cx(classes.innerWrap, className)}>
+        <div
+          className={cx(classes.logo)}
+          onClick={() => {
+            closeMenu();
+            scrollToTop();
+          }}
         >
-          <ArrowDownIcon size={28} color={forgroundColor} onClick={toggle} />
-        </motion.div>
-      )}
+          {logo}
+        </div>
+        {upMd ? (
+          <div className={classes.horizontalMenuWrapper}>
+            {menuItems.map((item, i) => (
+              <MenuItem
+                key={item.id}
+                item={item}
+                forgroundColor={forgroundColor}
+                closeMenu={closeMenu}
+                menuItemFontVariant={menuItemFontVariant}
+                menuSubItemFontVariant={menuSubItemFontVariant}
+                position={position}
+                complete={calcCompletePerItem(item)}
+              />
+            ))}
+          </div>
+        ) : null}
+        {!isOpen && !upMd && (
+          <AnimatePresence>
+            <motion.div
+              className={classes.topSectionInfo}
+              key={item ? item.name : ''}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {item ? (
+                <div
+                  className={classes.scrollIndicatorWrapper}
+                  style={{ backgroundColor: fade(forgroundColor, 0.5) }}
+                >
+                  <motion.div
+                    animate={{
+                      width: `${Math.round(calcCompletePerItem(item) * 100)}%`,
+                      transition: {
+                        duration: 0.25
+                      }
+                    }}
+                    className={classes.scrollIndicator}
+                    style={{ backgroundColor: item.color }}
+                  />
+                </div>
+              ) : null}
+              <Typography
+                variant={menuItemFontVariant}
+                style={{ color: forgroundColor }}
+              >
+                {item ? item.name : ''}
+              </Typography>
+            </motion.div>
+          </AnimatePresence>
+        )}
+        {!upMd && <Hamburger toggled={isOpen} toggle={toggle} />}
+      </div>
     </div>
   );
 }
