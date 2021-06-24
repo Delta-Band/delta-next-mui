@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 import { motion } from 'framer-motion';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useScrollYPosition } from 'react-use-scroll-position';
-import mobileImg from './swipe-down.svg';
-import desktopImg from './mouse-scroll-down.svg';
+import { ChevronDown } from '@styled-icons/heroicons-outline/ChevronDown';
+
+const TRANSITIONS = {
+  BOUNCE: {
+    duration: 0.72,
+    yoyo: Infinity,
+    ease: 'easeOut'
+  }
+};
 
 const useStyles = makeStyles((theme) => ({
   scrollTipRoot: {
@@ -20,10 +28,17 @@ const useStyles = makeStyles((theme) => ({
       top: 'calc(100vh - 100px)'
     }
   },
-  scrollImg: {
-    height: theme.spacing(7),
-    [theme.breakpoints.up('xl')]: {
-      height: theme.spacing(10)
+  inner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  txt: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      marginBottom: theme.spacing(2),
+      display: 'block'
     }
   }
 }));
@@ -31,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 function ScrollDownTip() {
   const classes = useStyles();
   const theme = useTheme();
-  const upMd = useMediaQuery(theme.breakpoints.up('md'));
+  const upXl = useMediaQuery(theme.breakpoints.up('xl'));
   const [showScrollTip, setShowScrollTip] = useState(true);
   const scrollY = useScrollYPosition();
 
@@ -49,7 +64,16 @@ function ScrollDownTip() {
       }}
       className={classes.scrollTipRoot}
     >
-      <img src={upMd ? desktopImg : mobileImg} className={classes.scrollImg} />
+      <Typography className={classes.txt}>Scroll For More</Typography>
+      <motion.div
+        transition={TRANSITIONS.BOUNCE}
+        className={classes.inner}
+        animate={{
+          y: ['30%', '-30%']
+        }}
+      >
+        <ChevronDown size={upXl ? 62 : 46} />
+      </motion.div>
     </motion.div>
   );
 }

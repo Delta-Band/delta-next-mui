@@ -13,7 +13,11 @@ export default {
   }
 };
 
-const Template = (args) => <ScrollDownTip {...args} />;
+const Template = (args) => (
+  <div style={{ height: '200vh' }}>
+    <ScrollDownTip {...args} />
+  </div>
+);
 
 export const Desktop = Template.bind({});
 Desktop.args = {};
