@@ -40,7 +40,12 @@ Default.args = {
         },
         {
           summary: <Typography>Summary</Typography>,
-          details: <Typography>Details</Typography>
+          details: [
+            {
+              summary: <Typography>Summary</Typography>,
+              details: <Typography>Details</Typography>
+            }
+          ]
         }
       ]
     }

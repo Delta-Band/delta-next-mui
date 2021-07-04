@@ -28,6 +28,7 @@ const Accordion = withStyles({
   root: {
     border: 'none',
     boxShadow: 'none',
+    background: 'transparent',
     '&:not(:last-child)': {
       borderBottom: 0
     },
@@ -101,25 +102,26 @@ function DeltaAccordion({ content = [] }) {
       </Accordion>
     );
   }
-
-  return content.map((item, i) => {
+  function structure(item, _key, isSubItem) {
     if (Array.isArray(item.details)) {
       return (
-        <Accordion key={i}>
+        <Accordion key={_key}>
           <AccordionSummary expandIcon={<ChevronDown size={24} />}>
             {item.summary}
           </AccordionSummary>
           <AccordionDetails className={classes.subAccordion}>
-            {item.details.map((subItem, j) => (
-              <AccordionItem key={`${i}-${j}`} item={subItem} isSubItem />
-            ))}
+            {item.details.map((subItem, j) =>
+              structure(subItem, `${_key}-${j}`, true)
+            )}
           </AccordionDetails>
         </Accordion>
       );
     } else {
-      return <AccordionItem key={i} item={item} />;
+      return <AccordionItem key={_key} item={item} isSubItem />;
     }
-  });
+  }
+
+  return content.map((item, i) => structure(item, i));
 }
 
 DeltaAccordion.proptypes = {
