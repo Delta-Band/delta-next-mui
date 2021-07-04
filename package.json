@@ -1,12 +1,12 @@
 {
   "name": "@deltaband/delta-next-mui",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "scripts": {
     "build": "rollup -c",
-    "npm-publish": "npm publish --access public",
+    "npm-publish": "yarn build && npm publish --access public",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
