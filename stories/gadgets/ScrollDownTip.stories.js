@@ -1,8 +1,6 @@
 import React from 'react';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import { ScrollDownTip } from '../src';
-
-console.log('INITIAL_VIEWPORTS:, ', INITIAL_VIEWPORTS);
+import { ScrollDownTip } from '../../src';
 
 export default {
   title: 'Gadgets/Scroll Down Tip',

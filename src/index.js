@@ -7,3 +7,4 @@
 // export { default as Iframe } from './Iframe';
 // export { default as DropMenu } from './DropMenu';
 export { default as ScrollDownTip } from './scroll-down-tip/ScrollDownTip';
+export { default as Accordion } from './Accordion';
