@@ -8,6 +8,7 @@ import { Accordion } from '../../src';
 export default {
   title: 'Layout/Accordion',
   component: Accordion,
+  argTypes: { onChange: { action: 'changed' } },
   parameters: {
     viewport: INITIAL_VIEWPORTS,
     defaultViewport: 'iphone6'
@@ -24,24 +25,30 @@ export const Default = Template.bind({});
 Default.args = {
   content: [
     {
+      id: '1',
       summary: <Typography>Summary 1</Typography>,
       details: <Typography>Details</Typography>
     },
     {
+      id: '2',
       summary: <Typography>Summary 2</Typography>,
       details: <Typography>Details</Typography>
     },
     {
+      id: '3',
       summary: <Typography>Summary 3</Typography>,
       details: [
         {
+          id: '4',
           summary: <Typography>Summary</Typography>,
           details: <Typography>Details</Typography>
         },
         {
+          id: '5',
           summary: <Typography>Summary</Typography>,
           details: [
             {
+              id: '6',
               summary: <Typography>Summary</Typography>,
               details: <Typography>Details</Typography>
             }
@@ -49,7 +56,8 @@ Default.args = {
         }
       ]
     }
-  ]
+  ],
+  forceOpen: '2-0'
 };
 Default.parameters = {
   viewport: {

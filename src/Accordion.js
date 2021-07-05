@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { ChevronRight } from '@styled-icons/boxicons-regular/ChevronRight';
@@ -84,16 +84,16 @@ const AccordionDetails = withStyles((theme) => ({
   }
 }))(MuiAccordionDetails);
 
-function DeltaAccordion({ content = [] }) {
+function DeltaAccordion({ content = [], onChange, forceOpen }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [expanded, setExpanded] = useState('0');
+  const [expanded, setExpanded] = useState(forceOpen || '0');
   const upSm = useMediaQuery(theme.breakpoints.up('sm'));
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
   const upLg = useMediaQuery(theme.breakpoints.up('lg'));
   const upXl = useMediaQuery(theme.breakpoints.up('xl'));
 
-  const handleChange = (i) => (event, isExpanded) => {
+  const handleChange = (i, item) => (event, isExpanded) => {
     const asArray = i.split('-');
     asArray.pop();
     const father = asArray.join('-');
@@ -114,8 +114,9 @@ function DeltaAccordion({ content = [] }) {
   function accordionItem(item, isSubItem = false, i) {
     return (
       <Accordion
+        key={i}
         expanded={expandedArray().includes(i)}
-        onChange={handleChange(i)}
+        onChange={handleChange(i, item)}
         className={classes.accordion}
       >
         <AccordionSummary
@@ -136,6 +137,19 @@ function DeltaAccordion({ content = [] }) {
       </Accordion>
     );
   }
+
+  useEffect(() => {
+    const address = expanded.split('-');
+    const item = address.reduce((acc, index, j) => {
+      if (j === 0) {
+        acc = acc[index];
+      } else {
+        acc = acc.details[index];
+      }
+      return acc;
+    }, content);
+    onChange(item);
+  }, [expanded]);
 
   return content.map((item, i) => accordionItem(item, false, `${i}`));
 }
