@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { ChevronDown } from '@styled-icons/boxicons-regular/ChevronDown';
@@ -81,47 +81,56 @@ const AccordionDetails = withStyles((theme) => ({
 function DeltaAccordion({ content = [] }) {
   const classes = useStyles();
   const theme = useTheme();
+  const [expanded, setExpanded] = useState('0');
   const upSm = useMediaQuery(theme.breakpoints.up('sm'));
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
   const upLg = useMediaQuery(theme.breakpoints.up('lg'));
   const upXl = useMediaQuery(theme.breakpoints.up('xl'));
-  function AccordionItem({ item, isSubItem = false }) {
+
+  const handleChange = (i) => (event, isExpanded) => {
+    const asArray = i.split('-');
+    asArray.pop();
+    const father = asArray.join('-');
+    setExpanded(isExpanded ? i : father);
+  };
+
+  function expandedArray() {
+    return expanded.split('-').reduce((acc, i, j) => {
+      if (j > 0) {
+        acc.push(`${acc[j - 1]}-${i}`);
+      } else {
+        acc.push(i);
+      }
+      return acc;
+    }, []);
+  }
+
+  function accordionItem(item, isSubItem = false, i) {
     return (
-      <Accordion>
+      <Accordion
+        expanded={expandedArray().includes(i)}
+        onChange={handleChange(i)}
+      >
         <AccordionSummary
           expandIcon={<ChevronDown size={24} />}
           className={cx({ [classes.subItemSummary]: isSubItem })}
+          id={i}
+          aria-controls={i}
         >
           {item.summary}
         </AccordionSummary>
-        <AccordionDetails
-        // className={cx({ [classes.subItemDetails]: isSubItem })}
-        >
-          {item.details}
+        <AccordionDetails>
+          {Array.isArray(item.details)
+            ? item.details.map((subItem, j) =>
+                accordionItem(subItem, true, `${i}-${j}`)
+              )
+            : item.details}
         </AccordionDetails>
       </Accordion>
     );
   }
-  function structure(item, _key, isSubItem) {
-    if (Array.isArray(item.details)) {
-      return (
-        <Accordion key={_key}>
-          <AccordionSummary expandIcon={<ChevronDown size={24} />}>
-            {item.summary}
-          </AccordionSummary>
-          <AccordionDetails className={classes.subAccordion}>
-            {item.details.map((subItem, j) =>
-              structure(subItem, `${_key}-${j}`, true)
-            )}
-          </AccordionDetails>
-        </Accordion>
-      );
-    } else {
-      return <AccordionItem key={_key} item={item} isSubItem />;
-    }
-  }
 
-  return content.map((item, i) => structure(item, i));
+  return content.map((item, i) => accordionItem(item, false, `${i}`));
 }
 
 DeltaAccordion.proptypes = {
