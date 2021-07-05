@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { ChevronDown } from '@styled-icons/boxicons-regular/ChevronDown';
+import { ChevronRight } from '@styled-icons/boxicons-regular/ChevronRight';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import {
@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   // },
   subAccordion: {
     paddingLeft: '29px !important'
+  },
+  accordion: {
+    // marginLeft: '-8px !important'
   }
 }));
 
@@ -64,8 +67,11 @@ const AccordionSummary = withStyles({
   },
   expanded: {},
   expandIcon: {
-    marginRight: 0,
-    marginLeft: -12
+    marginRight: -6,
+    marginLeft: -20,
+    '&$expanded': {
+      transform: 'rotate(90deg)'
+    }
   }
 })(MuiAccordionSummary);
 
@@ -110,9 +116,10 @@ function DeltaAccordion({ content = [] }) {
       <Accordion
         expanded={expandedArray().includes(i)}
         onChange={handleChange(i)}
+        className={classes.accordion}
       >
         <AccordionSummary
-          expandIcon={<ChevronDown size={24} />}
+          expandIcon={<ChevronRight size={38} />}
           className={cx({ [classes.subItemSummary]: isSubItem })}
           id={i}
           aria-controls={i}
