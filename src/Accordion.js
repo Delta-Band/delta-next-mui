@@ -139,6 +139,7 @@ function DeltaAccordion({ content = [], onChange, forceOpen }) {
   }
 
   useEffect(() => {
+    if (!onChange) return;
     const address = expanded.split('-');
     const item = address.reduce((acc, index, j) => {
       if (j === 0) {
@@ -150,6 +151,10 @@ function DeltaAccordion({ content = [], onChange, forceOpen }) {
     }, content);
     onChange(item);
   }, [expanded]);
+
+  useEffect(() => {
+    setExpanded(forceOpen || '0');
+  }, [forceOpen]);
 
   return content.map((item, i) => accordionItem(item, false, `${i}`));
 }
