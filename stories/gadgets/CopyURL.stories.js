@@ -1,10 +1,11 @@
 import React from 'react';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import { ScrollDownTip } from '../../src';
+import { Button } from '@material-ui/core';
+import { CopyURL } from '../../src';
 
 export default {
-  title: 'Gadgets/Scroll Down Tip',
-  component: ScrollDownTip,
+  title: 'Gadgets/Copy URL',
+  component: CopyURL,
   parameters: {
     viewport: INITIAL_VIEWPORTS,
     defaultViewport: 'iphone6'
@@ -12,13 +13,17 @@ export default {
 };
 
 const Template = (args) => (
-  <div style={{ height: '200vh' }}>
-    <ScrollDownTip {...args} />
+  <div
+    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+  >
+    <CopyURL {...args}>
+      <Button>Click Me</Button>
+    </CopyURL>
   </div>
 );
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = { url: 'https://delta.band' };
 Default.parameters = {
   viewport: {
     defaultViewport: 'iphone6'
