@@ -37,7 +37,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(2)
+  },
+  condensed: {
+    width: theme.spacing(10),
+    float: 'right'
   },
   btn: {
     cursor: 'pointer'
@@ -86,13 +90,17 @@ export default function Carousel({
   visibleItems = 1.5,
   spacing = 16,
   debug = false,
-  peekLeft = 16 * 3,
-  gaEventId = 'not_scpecified'
+  peekLeft = 16 / 2,
+  gaEventId = 'not_scpecified',
+  controlsVariant = 'spread',
+  forceControls = false,
+  onItemWidthChange = () => {}
 }) {
   const classes = useStyles();
   const myRef = useRef();
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
+  const upSm = useMediaQuery(theme.breakpoints.up('sm'));
   const [index, setIndex] = useState(0);
   const [itemWidth, setItemWidth] = useState(0);
   const [xPos, setXPos] = useState(0);
@@ -182,7 +190,11 @@ export default function Carousel({
     if (debug) {
       console.log('itemWidth: ', itemWidth);
     }
-    setXPos(-index * itemWidth + (index === 0 ? 0 : peekLeft));
+    setXPos(
+      -index * itemWidth +
+        (index === 0 ? 0 : (itemWidth * (visibleItems - 1)) / 2 + spacing / 2)
+    );
+    onItemWidthChange(itemWidth - spacing);
   }, [index, itemWidth]);
 
   useEffect(() => {
@@ -190,23 +202,25 @@ export default function Carousel({
     window.addEventListener('resize', initDebounced);
     docBody.current = document.body;
     myRef.current.addEventListener('touchstart', onTouchStart, true);
-    myRef.current.addEventListener('mousedown', onTouchStart, true);
+    // myRef.current.addEventListener('mousedown', onTouchStart, true);
     myRef.current.addEventListener('touchmove', onTouchMove, true);
-    myRef.current.addEventListener('mousemove', onTouchMove, true);
+    // myRef.current.addEventListener('mousemove', onTouchMove, true);
     myRef.current.addEventListener('touchend', onTouchEnd, true);
-    myRef.current.addEventListener('mouseup', onTouchEnd, true);
+    // myRef.current.addEventListener('mouseup', onTouchEnd, true);
     return () => {
       window.removeEventListener('resize', initDebounced);
       clearTimeout(timeout.current);
       if (myRef.current) {
         myRef.current.removeEventListener('touchstart', onTouchStart, true);
-        myRef.current.removeEventListener('mousedown', onTouchStart, true);
+        // myRef.current.removeEventListener('mousedown', onTouchStart, true);
         myRef.current.removeEventListener('touchmove', onTouchMove, true);
-        myRef.current.removeEventListener('mousemove', onTouchMove, true);
+        // myRef.current.removeEventListener('mousemove', onTouchMove, true);
+        myRef.current.removeEventListener('touchend', onTouchMove, true);
+        // myRef.current.removeEventListener('mouseup', onTouchMove, true);
       }
       if (docBody.current) {
         docBody.current.removeEventListener('touchend', onTouchEnd, true);
-        docBody.current.removeEventListener('mouseup', onTouchMove, true);
+        // docBody.current.removeEventListener('mouseup', onTouchMove, true);
       }
     };
   }, []);
@@ -236,8 +250,12 @@ export default function Carousel({
           </CarouselItem>
         ))}
       </motion.div>
-      {upMd && (
-        <div className={classes.carouselControls}>
+      {(upMd || forceControls) && (
+        <div
+          className={cx(classes.carouselControls, {
+            [classes.condensed]: upMd && controlsVariant === 'condensed'
+          })}
+        >
           <div>
             <motion.div
               variants={MOTION_VARIANTS.btn}
@@ -245,7 +263,7 @@ export default function Carousel({
               onClick={onSwipedRight}
               initial='disable'
               whileHover={{
-                scale: 1.3
+                scale: upMd ? 1.3 : 1
               }}
               animate={index === 0 ? 'disable' : 'enable'}
               style={{
@@ -263,7 +281,7 @@ export default function Carousel({
               onClick={onSwipedLeft}
               initial='disable'
               whileHover={{
-                scale: 1.3
+                scale: upMd ? 1.3 : 1
               }}
               animate={reachedTheEnd.current ? 'disable' : 'enable'}
               style={{

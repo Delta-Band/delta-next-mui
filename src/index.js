@@ -1,14 +1,7 @@
-// export { default as OnePageAppBar } from './AppBars/OnePageAppBar';
-// export { default as ParallaxCarousel } from './ParallaxCarousel';
-// export { default as Carousel } from './Carousel';
-// export { default as Reader } from './Reader';
-// export { default as LinkButton } from './LinkButton';
-// export { default as FadeVisible } from './FadeVisible';
-// export { default as Iframe } from './Iframe';
-// export { default as DropMenu } from './DropMenu';
 export { default as ScrollDownTip } from './scroll-down-tip/ScrollDownTip';
 export { default as Accordion } from './Accordion';
 export { default as CopyURL } from './CopyURL';
 export { default as Carousel } from './Carousel';
+export { default as PdfViewer } from './PdfViewer';
 export { default as KeyFrame } from './key-frame/KeyFrame';
 export { default as KeyFrameService } from './key-frame/keyframe.store';
