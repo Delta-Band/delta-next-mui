@@ -13,14 +13,15 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translate(-50%, 100%)',
     background: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
     paddingTop: theme.spacing(1.5),
     paddingBottom: theme.spacing(1),
-    borderRadius: theme.spacing(5)
+    borderRadius: theme.spacing(5),
+    zIndex: 12
   },
   txt: {
+    color: theme.palette.primary.contrastText,
     fontSize: 12,
     display: 'inline-flex',
     alignItems: 'center'
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function CopyURL({ children, classNames = {}, url }) {
+function CopyURL({ children, classNames = {}, url, autoHide = true }) {
   const classes = useStyles();
   const { Portal } = usePortal();
   const [showTip, setShowTip] = useState(false);
@@ -40,9 +41,11 @@ function CopyURL({ children, classNames = {}, url }) {
     navigator.clipboard.writeText(url);
     setShowTip(true);
     clearTimeout(timeOut.current);
-    timeOut.current = setTimeout(() => {
-      setShowTip(false);
-    }, 3000);
+    if (autoHide) {
+      timeOut.current = setTimeout(() => {
+        setShowTip(false);
+      }, 3000);
+    }
   }
 
   return (
