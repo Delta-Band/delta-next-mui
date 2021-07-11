@@ -70,7 +70,10 @@ function CarouselItem({ children, itemWidth, spacing }) {
       className={cx(classes.item, { [classes.disableChildren]: visible < 0.9 })}
       animate={{
         opacity: visible <= 0.6 ? 0.4 : 1,
-        filter: visible <= 0.6 ? 'grayscale(1)' : 'grayscale(0)'
+        filter: visible <= 0.6 ? 'grayscale(1)' : 'grayscale(0)',
+        transition: {
+          duration: visible <= 0.6 ? 0.2 : 0
+        }
       }}
       style={{
         width: itemWidth - spacing,
