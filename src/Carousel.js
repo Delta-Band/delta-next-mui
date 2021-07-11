@@ -101,6 +101,8 @@ export default function Carousel({
   const clientXMoveRef = useRef(0);
   const reachedTheEnd = useRef(false);
   const docBody = useRef();
+  const timeout = useRef();
+  const timeout2 = useRef();
   const visItems = useRef(visibleItems);
   reachedTheEnd.current = index >= children.length - visItems.current;
 
@@ -120,7 +122,7 @@ export default function Carousel({
   function gaEvent() {
     ReactGA.event({
       category: 'Carousel',
-      action: 'User has interacted with the carousel',
+      action: 'User has interacted with a carousel',
       label: gaEventId
     });
   }
@@ -149,8 +151,8 @@ export default function Carousel({
   }
 
   function onTouchStart(e) {
-    clientXRef.current = e.touches[0].clientX;
-    clientXMoveRef.current = e.touches[0].clientX;
+    clientXRef.current = e.touches ? e.touches[0].clientX : e.clientX;
+    clientXMoveRef.current = e.touches ? e.touches[0].clientX : e.clientX;
   }
 
   function onTouchEnd() {
@@ -164,7 +166,7 @@ export default function Carousel({
   }
 
   function onTouchMove(e) {
-    clientXMoveRef.current = e.touches[0].clientX;
+    clientXMoveRef.current = e.touches ? e.touches[0].clientX : e.clientX;
     if (Math.abs(clientXMoveRef.current - clientXRef.current) > 10) {
       docBody.current.addEventListener('touchmove', preventScroll, true);
     }
@@ -184,26 +186,37 @@ export default function Carousel({
   }, [index, itemWidth]);
 
   useEffect(() => {
-    setTimeout(init, 1000);
+    timeout.current = setTimeout(init, 1000);
     window.addEventListener('resize', initDebounced);
-    docBody.current = document.getElementById('__next');
+    docBody.current = document.body;
     myRef.current.addEventListener('touchstart', onTouchStart, true);
+    myRef.current.addEventListener('mousedown', onTouchStart, true);
     myRef.current.addEventListener('touchmove', onTouchMove, true);
+    myRef.current.addEventListener('mousemove', onTouchMove, true);
     myRef.current.addEventListener('touchend', onTouchEnd, true);
+    myRef.current.addEventListener('mouseup', onTouchEnd, true);
     return () => {
       window.removeEventListener('resize', initDebounced);
+      clearTimeout(timeout.current);
       if (myRef.current) {
         myRef.current.removeEventListener('touchstart', onTouchStart, true);
+        myRef.current.removeEventListener('mousedown', onTouchStart, true);
+        myRef.current.removeEventListener('touchmove', onTouchMove, true);
+        myRef.current.removeEventListener('mousemove', onTouchMove, true);
       }
       if (docBody.current) {
         docBody.current.removeEventListener('touchend', onTouchEnd, true);
+        docBody.current.removeEventListener('mouseup', onTouchMove, true);
       }
     };
   }, []);
 
   useEffect(() => {
-    setTimeout(init, 1000);
+    timeout2.current = setTimeout(init, 1000);
     visItems.current = visibleItems;
+    return () => {
+      clearTimeout(timeout.current2);
+    };
   }, [visibleItems]);
 
   return (
