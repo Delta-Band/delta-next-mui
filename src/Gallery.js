@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { motion, AnimatePresence } from 'framer-motion';
 import { wrap } from 'popmotion';
@@ -38,7 +38,12 @@ const swipePower = (offset, velocity) => {
   return Math.abs(offset) * velocity;
 };
 
-const Gallery = ({ children, className, infinte = false }) => {
+const Gallery = ({
+  children,
+  className,
+  infinte = false,
+  forcePage = null
+}) => {
   const [[page, direction], setPage] = useState([0, 0]);
   const classes = useStyles();
 
@@ -58,6 +63,12 @@ const Gallery = ({ children, className, infinte = false }) => {
       setPage([page + newDirection, newDirection]);
     }
   };
+
+  useEffect(() => {
+    if (forcePage != null) {
+      setPage([forcePage, forcePage - page]);
+    }
+  }, [forcePage]);
 
   return (
     <>
@@ -90,12 +101,6 @@ const Gallery = ({ children, className, infinte = false }) => {
           {children[imageIndex]}
         </motion.div>
       </AnimatePresence>
-      <div className='next' onClick={() => paginate(1)}>
-        {'‣'}
-      </div>
-      <div className='prev' onClick={() => paginate(-1)}>
-        {'‣'}
-      </div>
     </>
   );
 };

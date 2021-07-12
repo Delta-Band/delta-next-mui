@@ -17,7 +17,8 @@ import Gallery from './Gallery';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%'
+    width: '100%',
+    position: 'relative'
   },
   canvas: {
     border: '1px solid',
@@ -51,9 +52,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-flex'
   },
   fullScreenBtn: {
-    marginTop: theme.spacing(1.1),
     paddingLeft: theme.spacing(1),
-    paddingRights: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+    position: 'absolute',
+    bottom: 0,
     '&:hover': {
       '& $expandIcon': {
         opacity: 1,
@@ -124,7 +126,10 @@ const toolsStyles = makeStyles((theme) => ({
     margintop: -1
   },
   marginRight: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(1),
+    [theme.breakpoints.up('sm')]: {
+      marginRight: theme.spacing(2)
+    }
   },
   arrows: {
     display: 'flex',
@@ -201,14 +206,28 @@ function PdfViewer({ file }) {
   const upLg = useMediaQuery(theme.breakpoints.up('lg'));
   const upXl = useMediaQuery(theme.breakpoints.up('xl'));
   const [numPages, setNumPages] = useState(0);
-  const [fullScreen, setFullScreen] = useState(true);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [fullScreen, setFullScreen] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
   const [width, setWidth] = useState(0);
   const inputRef = useRef();
   const { Portal } = usePortal();
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
+  }
+
+  function GoFullScreenBtn() {
+    return (
+      <Button
+        className={classes.fullScreenBtn}
+        size='small'
+        onClick={() => {
+          setFullScreen(true);
+        }}
+      >
+        Full Screen <ExpandIcon size={18} className={classes.expandIcon} />
+      </Button>
+    );
   }
 
   useEffect(() => {
@@ -245,16 +264,8 @@ function PdfViewer({ file }) {
           ))}
           {}
         </Carousel>
+        <GoFullScreenBtn />
       </Document>
-      <Button
-        className={classes.fullScreenBtn}
-        size='small'
-        onClick={() => {
-          setFullScreen(true);
-        }}
-      >
-        Full Screen <ExpandIcon size={18} className={classes.expandIcon} />
-      </Button>
       <AnimatePresence>
         {fullScreen && (
           <motion.div
@@ -270,21 +281,25 @@ function PdfViewer({ file }) {
               onLoadSuccess={onDocumentLoadSuccess}
               inputRef={inputRef}
             >
-              <Gallery className={classes.gallery}>
+              <Gallery className={classes.gallery} forcePage={pageNumber}>
                 {[...Array(numPages)].map((j, i) => (
                   <Page
                     key={i}
                     className={classes.canvas}
                     pageNumber={i + 1}
-                    width={width}
+                    width={width * 1.1}
                   />
                 ))}
                 {}
               </Gallery>
             </Document>
             <Tools
-              onLeft={() => {}}
-              onRight={() => {}}
+              onLeft={() => {
+                setPageNumber(Math.max(0, pageNumber - 1));
+              }}
+              onRight={() => {
+                setPageNumber(Math.min(numPages - 1, pageNumber + 1));
+              }}
               onExit={() => setFullScreen(false)}
               onRestart={() => {}}
             />
