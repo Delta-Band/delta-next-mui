@@ -33,15 +33,12 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   carouselControls: {
-    width: '100%',
+    width: theme.spacing(10),
+    float: 'right',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: theme.spacing(2)
-  },
-  condensed: {
-    width: theme.spacing(10),
-    float: 'right'
   },
   btn: {
     cursor: 'pointer'
@@ -52,10 +49,12 @@ const useStyles = makeStyles((theme) => ({
 const MOTION_VARIANTS = {
   btn: {
     enable: {
-      opacity: 1
+      opacity: 0.3,
+      scale: 1
     },
     disable: {
-      opacity: 0
+      opacity: 0,
+      scale: 0
     }
   }
 };
@@ -95,9 +94,9 @@ export default function Carousel({
   debug = false,
   peekLeft = 16 / 2,
   gaEventId = 'not_scpecified',
-  controlsVariant = 'spread',
   forceControls = false,
-  onItemWidthChange = () => {}
+  onItemWidthChange = () => {},
+  controsColor
 }) {
   const classes = useStyles();
   const myRef = useRef();
@@ -244,7 +243,7 @@ export default function Carousel({
         transition={{
           type: 'spring',
           bounce: 0.2,
-          duration: 0.25 * visItems.current
+          duration: 0.5 * visItems.current
         }}
       >
         {children.map((child, i) => (
@@ -254,11 +253,7 @@ export default function Carousel({
         ))}
       </motion.div>
       {(upMd || forceControls) && (
-        <div
-          className={cx(classes.carouselControls, {
-            [classes.condensed]: upMd && controlsVariant === 'condensed'
-          })}
-        >
+        <div className={cx(classes.carouselControls)}>
           <div>
             <motion.div
               variants={MOTION_VARIANTS.btn}
@@ -266,12 +261,13 @@ export default function Carousel({
               onClick={onSwipedRight}
               initial='disable'
               whileHover={{
-                scale: upMd ? 1.3 : 1
+                opacity: 1
               }}
               animate={index === 0 ? 'disable' : 'enable'}
               style={{
-                transformOrigin: 'center left',
-                pointerEvents: index === 0 ? 'none' : 'all'
+                transformOrigin: 'center center',
+                pointerEvents: index === 0 ? 'none' : 'all',
+                color: controsColor
               }}
             >
               {leftControll || <ChevronLeft size={32} />}
@@ -284,13 +280,14 @@ export default function Carousel({
               onClick={onSwipedLeft}
               initial='disable'
               whileHover={{
-                scale: upMd ? 1.3 : 1
+                opacity: 1
               }}
               animate={reachedTheEnd.current ? 'disable' : 'enable'}
               style={{
-                transformOrigin: 'center right',
+                transformOrigin: 'center center',
                 pointerEvents:
-                  index >= children.length - visItems.current ? 'none' : 'all'
+                  index >= children.length - visItems.current ? 'none' : 'all',
+                color: controsColor
               }}
             >
               {rightControll || <ChevronRight size={32} />}

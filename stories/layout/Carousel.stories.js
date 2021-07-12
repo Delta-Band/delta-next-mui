@@ -19,7 +19,7 @@ export default {
 const useStyles = makeStyles((theme) => ({
   page: {
     height: '100vh',
-    width: '80vw',
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
