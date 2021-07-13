@@ -14,6 +14,7 @@ import { ArrowLeft as ChevronLeft } from '@styled-icons/bootstrap/ArrowLeft';
 import { ArrowRight as ChevronRight } from '@styled-icons/bootstrap/ArrowRight';
 import Carousel from './Carousel';
 import Gallery from './Gallery';
+import GA from './GA';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -139,9 +140,17 @@ const toolsStyles = makeStyles((theme) => ({
   }
 }));
 
-function Tools({ onLeft, onRight, onExit, onRestart }) {
+function Tools({ onLeft, onRight, onExit, onRestart, gaLabel }) {
   const classes = toolsStyles();
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    GA.event(
+      'PDF Viewer',
+      `${show ? 'Opened' : 'Closed'} Full Screen Tools`,
+      gaLabel
+    );
+  }, [show]);
 
   return (
     <div className={classes.tools}>
@@ -198,7 +207,7 @@ function Tools({ onLeft, onRight, onExit, onRestart }) {
   );
 }
 
-function PdfViewer({ file }) {
+function PdfViewer({ file, gaLabel }) {
   const classes = useStyles();
   const theme = useTheme();
   const upSm = useMediaQuery(theme.breakpoints.up('sm'));
@@ -234,11 +243,15 @@ function PdfViewer({ file }) {
     if (fullScreen) {
       document.body.style.overflowY = 'hidden';
       document.body.style.overflowX = 'hidden';
+      GA.event('PDF Viewer', 'Enter full screen mode', gaLabel);
     } else {
       document.body.style.overflowX = 'hidden';
       document.body.style.overflowY = 'auto';
+      GA.event('PDF Viewer', 'Exit full screen mode', gaLabel);
     }
   }, [fullScreen]);
+
+  console.log('pageNumber: ', pageNumber);
 
   return (
     <div className={classes.root}>
@@ -250,6 +263,7 @@ function PdfViewer({ file }) {
         <Carousel
           visibleItems={1.1}
           forceControls
+          forceIndex={pageNumber}
           onItemWidthChange={(width) => {
             setWidth(width - 2);
           }}
@@ -281,7 +295,11 @@ function PdfViewer({ file }) {
               onLoadSuccess={onDocumentLoadSuccess}
               inputRef={inputRef}
             >
-              <Gallery className={classes.gallery} forcePage={pageNumber}>
+              <Gallery
+                className={classes.gallery}
+                forcePage={pageNumber}
+                onChange={setPageNumber}
+              >
                 {[...Array(numPages)].map((j, i) => (
                   <Page
                     key={i}
@@ -296,12 +314,18 @@ function PdfViewer({ file }) {
             <Tools
               onLeft={() => {
                 setPageNumber(Math.max(0, pageNumber - 1));
+                GA.event('PDF Viewer', 'Used arrows to navigate', gaLabel);
               }}
               onRight={() => {
                 setPageNumber(Math.min(numPages - 1, pageNumber + 1));
+                GA.event('PDF Viewer', 'Used arrows to navigate', gaLabel);
               }}
               onExit={() => setFullScreen(false)}
-              onRestart={() => {}}
+              onRestart={() => {
+                setPageNumber(0);
+                GA.event('PDF Viewer', 'Used Restart button', gaLabel);
+              }}
+              gaLabel={gaLabel}
             />
           </motion.div>
         )}

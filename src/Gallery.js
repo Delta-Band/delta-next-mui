@@ -42,7 +42,8 @@ const Gallery = ({
   children,
   className,
   infinte = false,
-  forcePage = null
+  forcePage = null,
+  onChange = () => {}
 }) => {
   const [[page, direction], setPage] = useState([0, 0]);
   const classes = useStyles();
@@ -65,10 +66,14 @@ const Gallery = ({
   };
 
   useEffect(() => {
-    if (forcePage != null) {
+    if (forcePage != null && forcePage != page) {
       setPage([forcePage, forcePage - page]);
     }
   }, [forcePage]);
+
+  useEffect(() => {
+    onChange(page);
+  }, [page]);
 
   return (
     <>

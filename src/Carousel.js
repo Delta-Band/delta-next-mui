@@ -92,7 +92,7 @@ export default function Carousel({
   visibleItems = 1.5,
   spacing = 16,
   debug = false,
-  peekLeft = 16 / 2,
+  forceIndex = 0,
   gaEventId = 'not_scpecified',
   forceControls = false,
   onItemWidthChange = () => {},
@@ -234,6 +234,10 @@ export default function Carousel({
       clearTimeout(timeout.current2);
     };
   }, [visibleItems]);
+
+  useEffect(() => {
+    setIndex(forceIndex);
+  }, [forceIndex]);
 
   return (
     <div className={cx(classes.root, className)} ref={myRef}>

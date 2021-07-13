@@ -5,5 +5,6 @@ export { default as Carousel } from './Carousel';
 export { default as PdfViewer } from './PdfViewer';
 export { default as Modal } from './Modal';
 export { default as Gallery } from './Gallery';
+export { default as GA } from './GA';
 export { default as KeyFrame } from './key-frame/KeyFrame';
 export { default as KeyFrameService } from './key-frame/keyframe.store';
