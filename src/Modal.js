@@ -55,57 +55,59 @@ export default function DeltaModal({
   }, [show]);
 
   return (
-    <Portal ref={ref}>
+    <Portal>
       <AnimatePresence>
-        {show && (
-          <motion.div
-            className={classes.screenCover}
-            initial={{
-              pointerEvents: 'none',
-              opacity: 0,
-              transition: {
-                bounce: 0,
-                when: 'afterChildren'
-              }
-            }}
-            animate={{
-              pointerEvents: 'all',
-              opacity: 1,
-              transition: {
-                when: 'beforeChildren',
-                bounce: 0
-              }
-            }}
-            exit={{
-              pointerEvents: 'none',
-              opacity: 0,
-              transition: {
-                bounce: 0,
-                when: 'afterChildren'
-              }
-            }}
-            onClick={onClose}
-          >
+        <div ref={ref}>
+          {show && (
             <motion.div
-              onClick={onClose}
-              className={cx(classes.modal, classNames.modal)}
+              className={classes.screenCover}
               initial={{
+                pointerEvents: 'none',
                 opacity: 0,
-                scale: 0
+                transition: {
+                  bounce: 0,
+                  when: 'afterChildren'
+                }
               }}
               animate={{
+                pointerEvents: 'all',
                 opacity: 1,
-                scale: 1
+                transition: {
+                  when: 'beforeChildren',
+                  bounce: 0
+                }
               }}
               exit={{
+                pointerEvents: 'none',
                 opacity: 0,
-                scale: 0
+                transition: {
+                  bounce: 0,
+                  when: 'afterChildren'
+                }
               }}
+              onClick={onClose}
             >
-              {children}
+              <motion.div
+                onClick={onClose}
+                className={cx(classes.modal, classNames.modal)}
+                initial={{
+                  opacity: 0,
+                  scale: 0
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0
+                }}
+              >
+                {children}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
+          )}
+        </div>
       </AnimatePresence>
     </Portal>
   );
