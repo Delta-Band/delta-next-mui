@@ -8,6 +8,7 @@ import { useVisible } from 'react-hooks-visible';
 import ReactGA from 'react-ga';
 import { ArrowLeft as ChevronLeft } from '@styled-icons/bootstrap/ArrowLeft';
 import { ArrowRight as ChevronRight } from '@styled-icons/bootstrap/ArrowRight';
+import GA from './GA';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,7 +94,7 @@ export default function Carousel({
   spacing = 16,
   debug = false,
   forceIndex = 0,
-  gaEventId = 'not_scpecified',
+  gaCategory,
   forceControls = false,
   onItemWidthChange = () => {},
   controsColor,
@@ -131,11 +132,12 @@ export default function Carousel({
   };
 
   function gaEvent() {
-    ReactGA.event({
-      category: 'Carousel',
-      action: 'User has interacted with a carousel',
-      label: gaEventId
-    });
+    if (gaCategory) {
+      GA.event({
+        category: gaCategory,
+        action: `User has interacted with the ${gaCategory} carousel`
+      });
+    }
   }
 
   function init() {

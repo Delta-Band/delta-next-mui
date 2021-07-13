@@ -140,16 +140,14 @@ const toolsStyles = makeStyles((theme) => ({
   }
 }));
 
-function Tools({ onLeft, onRight, onExit, onRestart, gaLabel }) {
+function Tools({ onLeft, onRight, onExit, onRestart, gaCategory }) {
   const classes = toolsStyles();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    GA.event(
-      'PDF Viewer',
-      `${show ? 'Opened' : 'Closed'} Full Screen Tools`,
-      gaLabel
-    );
+    if (gaCategory) {
+      GA.event(gaCategory, `${show ? 'Opened' : 'Closed'} Full Screen Tools`);
+    }
   }, [show]);
 
   return (
@@ -207,7 +205,7 @@ function Tools({ onLeft, onRight, onExit, onRestart, gaLabel }) {
   );
 }
 
-function PdfViewer({ file, gaLabel }) {
+function PdfViewer({ file, gaCategory }) {
   const classes = useStyles();
   const theme = useTheme();
   const upSm = useMediaQuery(theme.breakpoints.up('sm'));
@@ -216,9 +214,10 @@ function PdfViewer({ file, gaLabel }) {
   const upXl = useMediaQuery(theme.breakpoints.up('xl'));
   const [numPages, setNumPages] = useState(0);
   const [fullScreen, setFullScreen] = useState(false);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [slide, setSlide] = useState(0);
   const [width, setWidth] = useState(0);
   const inputRef = useRef();
+  const pageViewStartTime = useRef(new Date().getTime());
   const { Portal } = usePortal();
 
   function onDocumentLoadSuccess({ numPages }) {
@@ -243,15 +242,26 @@ function PdfViewer({ file, gaLabel }) {
     if (fullScreen) {
       document.body.style.overflowY = 'hidden';
       document.body.style.overflowX = 'hidden';
-      GA.event('PDF Viewer', 'Enter full screen mode', gaLabel);
+      if (gaCategory) {
+        GA.event(gaCategory, 'Enter full screen mode');
+      }
     } else {
       document.body.style.overflowX = 'hidden';
       document.body.style.overflowY = 'auto';
-      GA.event('PDF Viewer', 'Exit full screen mode', gaLabel);
+      if (gaCategory) {
+        GA.event(gaCategory, 'Exit full screen mode');
+      }
     }
   }, [fullScreen]);
 
-  console.log('pageNumber: ', pageNumber);
+  useEffect(() => {
+    const timestamp = new Date().getTime();
+    const timeSpent = (pageViewStartTime - timestamp) / 1000;
+    if (timeSpent >= 2 && gaCategory) {
+      GA.event(gaCategory, `time spent on slide ${slide}`, timeSpent);
+    }
+    pageViewStartTime.current = timestamp;
+  }, [slide]);
 
   return (
     <div className={classes.root}>
@@ -263,11 +273,11 @@ function PdfViewer({ file, gaLabel }) {
         <Carousel
           visibleItems={1.1}
           forceControls
-          forceIndex={pageNumber}
+          forceIndex={slide}
           onItemWidthChange={(width) => {
             setWidth(width - 2);
           }}
-          onChange={setPageNumber}
+          onChange={setSlide}
         >
           {[...Array(numPages)].map((j, i) => (
             <Page
@@ -298,8 +308,8 @@ function PdfViewer({ file, gaLabel }) {
             >
               <Gallery
                 className={classes.gallery}
-                forcePage={pageNumber}
-                onChange={setPageNumber}
+                forcePage={slide}
+                onChange={setSlide}
               >
                 {[...Array(numPages)].map((j, i) => (
                   <Page
@@ -314,19 +324,25 @@ function PdfViewer({ file, gaLabel }) {
             </Document>
             <Tools
               onLeft={() => {
-                setPageNumber(Math.max(0, pageNumber - 1));
-                GA.event('PDF Viewer', 'Used arrows to navigate', gaLabel);
+                setSlide(Math.max(0, slide - 1));
+                if (gaCategory) {
+                  GA.event(gaCategory, 'Used arrows to navigate');
+                }
               }}
               onRight={() => {
-                setPageNumber(Math.min(numPages - 1, pageNumber + 1));
-                GA.event('PDF Viewer', 'Used arrows to navigate', gaLabel);
+                setSlide(Math.min(numPages - 1, slide + 1));
+                if (gaCategory) {
+                  GA.event(gaCategory, 'Used arrows to navigate');
+                }
               }}
               onExit={() => setFullScreen(false)}
               onRestart={() => {
-                setPageNumber(0);
-                GA.event('PDF Viewer', 'Used Restart button', gaLabel);
+                setSlide(0);
+                if (gaCategory) {
+                  GA.event(gaCategory, 'Used Restart button');
+                }
               }}
-              gaLabel={gaLabel}
+              gaCategory={gaCategory}
             />
           </motion.div>
         )}
