@@ -2,7 +2,7 @@ export { default as ScrollDownTip } from './scroll-down-tip/ScrollDownTip';
 export { default as Accordion } from './Accordion';
 export { default as CopyURL } from './CopyURL';
 export { default as Carousel } from './Carousel';
-export { default as PdfViewer } from './PdfViewer';
+// export { default as PdfViewer } from './PdfViewer';
 export { default as Modal } from './Modal';
 export { default as Gallery } from './Gallery';
 export { default as GA } from './GA';

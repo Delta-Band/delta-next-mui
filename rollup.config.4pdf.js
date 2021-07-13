@@ -2,21 +2,17 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { babel } from '@rollup/plugin-babel';
+import multiInput from 'rollup-plugin-multi-input';
 import image from '@rollup/plugin-image';
 
 const packageJson = require('./package.json');
 
 export default {
-  input: 'src/index.js',
+  input: 'src/PdfViewer.js',
   output: [
     {
-      file: packageJson.main,
+      dir: 'lib',
       format: 'cjs',
-      sourcemap: true
-    },
-    {
-      file: packageJson.module,
-      format: 'esm',
       sourcemap: true
     }
   ],
@@ -28,6 +24,7 @@ export default {
       exclude: 'node_modules/**',
       presets: ['@babel/env', '@babel/preset-react']
     }),
-    commonjs()
+    commonjs(),
+    multiInput()
   ]
 };
