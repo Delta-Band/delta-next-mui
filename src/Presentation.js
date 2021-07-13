@@ -3,10 +3,10 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Button, Typography, IconButton } from '@material-ui/core';
 import { motion } from 'framer-motion';
-import { Expand as ExpandIcon } from '@styled-icons/fa-solid/Expand';
+import { Fullscreen as ExpandIcon } from '@styled-icons/remix-line/Fullscreen';
 import cx from 'classnames';
-import { FullscreenExit as ExitIcon } from '@styled-icons/material/FullscreenExit';
-import { RestartAlt as RestartIcon } from '@styled-icons/material/RestartAlt';
+import { FullscreenExit as ExitIcon } from '@styled-icons/remix-fill/FullscreenExit';
+import { Restart as RestartIcon } from '@styled-icons/remix-line/Restart';
 import Carousel from './Carousel';
 import Modal from './Modal';
 import GA from './GA';
@@ -54,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       opacity: 0.3
     }
+  },
+  iconButton: {
+    marginTop: 8
   },
   gallery: {
     width: '80%',
@@ -106,12 +109,14 @@ function Tools({ setFullScreen, onRestart, isFullScreen }) {
           {isFullScreen ? (
             <ExitIcon size={24} className={classes.icon} />
           ) : (
-            <ExpandIcon size={18} className={classes.icon} />
+            <ExpandIcon size={24} className={classes.icon} />
           )}
         </Button>
       ) : (
         <IconButton
+          className={cx(classes.iconButton)}
           color='secondary'
+          size='medium'
           onClick={() => {
             setFullScreen(!isFullScreen);
           }}
@@ -119,7 +124,7 @@ function Tools({ setFullScreen, onRestart, isFullScreen }) {
           {isFullScreen ? (
             <ExitIcon size={24} className={classes.icon} />
           ) : (
-            <ExpandIcon size={18} className={classes.icon} />
+            <ExpandIcon size={24} className={classes.icon} />
           )}
         </IconButton>
       )}
@@ -141,7 +146,12 @@ function Tools({ setFullScreen, onRestart, isFullScreen }) {
           <RestartIcon size={24} className={classes.icon} />
         </Button>
       ) : (
-        <IconButton color='secondary' onClick={onRestart}>
+        <IconButton
+          color='secondary'
+          onClick={onRestart}
+          size='medium'
+          className={cx(classes.iconButton)}
+        >
           <RestartIcon size={24} className={classes.icon} />
         </IconButton>
       )}
@@ -189,8 +199,8 @@ function Presentation({ slides, gaCategory }) {
 
   useEffect(() => {
     const timestamp = new Date().getTime();
-    const timeSpent = (slideViewStartTime - timestamp) / 1000;
-    if (timeSpent >= 2 && gaCategory) {
+    const timeSpent = (timestamp - slideViewStartTime.current) / 1000;
+    if (timeSpent >= 1.5 && gaCategory) {
       GA.event(gaCategory, `time spent on slide ${index}`, timeSpent);
     }
     slideViewStartTime.current = timestamp;

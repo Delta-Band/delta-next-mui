@@ -38,6 +38,7 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
+  gaCategory: 'Investors Presentation',
   slides: [
     'https://firebasestorage.googleapis.com/v0/b/reactor-dam.appspot.com/o/OHUMR4479PfGVcQoGe3uKrrLg233%2FgQN8jySJE3ErNmMakf9Z%2Fslide?alt=media&token=8e17c234-19f2-48cb-8978-fe7c1d48f558&noCache=1626181458474',
     'https://firebasestorage.googleapis.com/v0/b/reactor-dam.appspot.com/o/OHUMR4479PfGVcQoGe3uKrrLg233%2Fd3lxK8SYFMwlCVYrNA99%2Fslide?alt=media&token=9afd981f-98ed-4e96-974a-55e83ab9de09&noCache=1626181487640',

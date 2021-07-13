@@ -34,9 +34,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   carouselControls: {
-    float: 'right',
     display: 'flex',
-    // marginTop: theme.spacing(2),
+    justifyContent: 'flex-end',
     opacity: 0
   },
   btn: {
@@ -280,7 +279,7 @@ export default function Carousel({
               }}
             >
               {leftControll || (
-                <IconButton color='secondary'>
+                <IconButton color='secondary' size='medium'>
                   <ChevronLeft size={32} />
                 </IconButton>
               )}
@@ -304,7 +303,7 @@ export default function Carousel({
               }}
             >
               {rightControll || (
-                <IconButton color='secondary'>
+                <IconButton color='secondary' size='medium'>
                   <ChevronRight size={32} />
                 </IconButton>
               )}
