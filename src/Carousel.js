@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useVisible } from 'react-hooks-visible';
-import ReactGA from 'react-ga';
 import { ArrowLeft as ChevronLeft } from '@styled-icons/bootstrap/ArrowLeft';
 import { ArrowRight as ChevronRight } from '@styled-icons/bootstrap/ArrowRight';
 import GA from './GA';
@@ -135,7 +134,7 @@ export default function Carousel({
     if (gaCategory) {
       GA.event({
         category: gaCategory,
-        action: `User has interacted with the ${gaCategory} carousel`
+        action: 'User has interacted with the carousel'
       });
     }
   }
