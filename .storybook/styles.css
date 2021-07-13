@@ -2,6 +2,10 @@
   overflow-x: hidden;
 }
 
+.sb-main-centered {
+  min-height: 100%; 
+}
+
 #root {
   width: 100%;
 }

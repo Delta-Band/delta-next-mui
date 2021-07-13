@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import usePortal from 'react-useportal';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -15,6 +15,7 @@ import { ArrowRight as ChevronRight } from '@styled-icons/bootstrap/ArrowRight';
 import Carousel from './Carousel';
 import Gallery from './Gallery';
 import GA from './GA';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -1,15 +1,23 @@
-import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { motion, AnimatePresence } from 'framer-motion';
+import cx from 'classnames';
 import { wrap } from 'popmotion';
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  galleryContainer: {
+    display: 'inline-flex'
+  },
+  galleryItem: {
+    flexShrink: 0,
+    width: '100%'
+  }
+}));
 
 const variants = {
   enter: (direction) => {
     return {
-      x: direction > 0 ? 1000 : -1000,
+      x: direction > 0 ? '100vw' : '-100vw',
       opacity: 0
     };
   },
@@ -21,7 +29,7 @@ const variants = {
   exit: (direction) => {
     return {
       zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
+      x: direction < 0 ? '100vw' : '-100vw',
       opacity: 0
     };
   }
@@ -45,16 +53,14 @@ const Gallery = ({
   forcePage = 0,
   onChange = () => {}
 }) => {
+  // HOOKS
   const [[page, direction], setPage] = useState([forcePage, 0]);
   const classes = useStyles();
 
-  // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
-  // then wrap that within 0-2 to find our image ID in the array below. By passing an
-  // absolute page index as the `motion` component's `key` prop, `AnimatePresence` will
-  // detect it as an entirely new image. So you can infinitely paginate as few as 1 images.
   const imageIndex = infinte ? wrap(0, children.length, page) : page;
 
-  const paginate = (newDirection) => {
+  // METHODS
+  function paginate(newDirection) {
     if (infinte) {
       setPage([page + newDirection, newDirection]);
     } else if (
@@ -63,8 +69,9 @@ const Gallery = ({
     ) {
       setPage([page + newDirection, newDirection]);
     }
-  };
+  }
 
+  // EFFECTS
   useEffect(() => {
     if (forcePage != page) {
       debugger;
@@ -85,7 +92,7 @@ const Gallery = ({
           key={page}
           custom={direction}
           variants={variants}
-          className={className}
+          className={cx(classes.galleryContainer, className)}
           initial='enter'
           animate='center'
           exit='exit'
@@ -106,7 +113,7 @@ const Gallery = ({
             }
           }}
         >
-          {children[imageIndex]}
+          <div className={classes.galleryItem}>{children[imageIndex]}</div>
         </motion.div>
       </AnimatePresence>
     </>

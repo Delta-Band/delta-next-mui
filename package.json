@@ -1,12 +1,12 @@
 {
   "name": "@deltaband/delta-next-mui",
-  "version": "0.0.21",
+  "version": "0.0.24",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "scripts": {
     "storybook": "start-storybook -p 6006",
-    "npm-publish": "yarn build && yarn build-pdf-viewer && npm publish --access public",
+    "npm-publish": "yarn build && npm publish --access public",
     "build": "rollup -c rollup.config.js",
     "build-pdf-viewer": "rollup -c rollup.config.4pdf.js",
     "build-storybook": "build-storybook"

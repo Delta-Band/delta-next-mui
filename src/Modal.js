@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import usePortal from 'react-useportal';
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import cx from 'classnames';
 import disableScroll from 'disable-scroll';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     height: '100%',
     width: '100vw',
-    backgroundColor: fade(theme.palette.primary.dark, 0.5),
+    background: 'rgb(0, 0, 0)',
     backdropFilter: 'blur(17px)',
     display: 'flex',
     alignItems: 'center',
@@ -20,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1
   },
   modal: {
-    // backgroundColor: theme.palette.primary.dark,
     boxShadow: theme.shadows[15],
     borderRadius: 15,
     overflow: 'hidden',
@@ -28,7 +28,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function DeltaModal({ show, onClose, children }) {
+export default function DeltaModal({
+  show,
+  onClose,
+  children,
+  classNames = {},
+  disableOrchstratedAnimation = false
+}) {
   const classes = useStyles();
   const { Portal } = usePortal();
 
@@ -41,29 +47,29 @@ export default function DeltaModal({ show, onClose, children }) {
   }, [show]);
 
   const container = {
-    hidden: {
+    hidden: (disableOrchstratedAnimation) => ({
       pointerEvents: 'none',
       opacity: 0,
       transition: {
         bounce: 0,
-        when: 'afterChildren'
+        when: disableOrchstratedAnimation ? undefined : 'afterChildren'
       }
-    },
-    show: {
+    }),
+    show: (disableOrchstratedAnimation) => ({
       pointerEvents: 'all',
       opacity: 1,
       transition: {
-        when: 'beforeChildren',
+        when: disableOrchstratedAnimation ? undefined : 'beforeChildren',
         bounce: 0
       }
-    }
+    })
   };
 
   const modal = {
-    hidden: {
+    hidden: (disableScaleAnimation) => ({
       opacity: 0,
-      scale: 0
-    },
+      scale: disableScaleAnimation ? 1 : 0
+    }),
     show: {
       opacity: 1,
       scale: 1
@@ -74,22 +80,55 @@ export default function DeltaModal({ show, onClose, children }) {
     <Portal>
       <AnimatePresence>
         {show && (
-          <div>Hello</div>
-          // <motion.div
-          //   className={classes.screenCover}
-          //   variants={container}
-          //   initial='hidden'
-          //   animate={show ? 'show' : 'hidden'}
-          //   onClick={onClose}
-          // >
-          //   <motion.div
-          //     onClick={onClose}
-          //     className={classes.modal}
-          //     variants={modal}
-          //   >
-          //     {children}
-          //   </motion.div>
-          // </motion.div>
+          <motion.div
+            className={classes.screenCover}
+            // variants={container}
+            // custom={disableOrchstratedAnimation}
+            initial={{
+              pointerEvents: 'none',
+              opacity: 0,
+              transition: {
+                bounce: 0,
+                when: 'afterChildren'
+              }
+            }}
+            animate={{
+              pointerEvents: 'all',
+              opacity: 1,
+              transition: {
+                when: 'beforeChildren',
+                bounce: 0
+              }
+            }}
+            exit={{
+              pointerEvents: 'none',
+              opacity: 0,
+              transition: {
+                bounce: 0,
+                when: 'afterChildren'
+              }
+            }}
+            onClick={onClose}
+          >
+            <motion.div
+              onClick={onClose}
+              className={cx(classes.modal, classNames.modal)}
+              initial={{
+                opacity: 0,
+                scale: 0
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0
+              }}
+            >
+              {children}
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </Portal>

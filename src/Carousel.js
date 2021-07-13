@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { debounce } from 'lodash';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
+import { IconButton } from '@material-ui/core';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useVisible } from 'react-hooks-visible';
@@ -33,12 +34,10 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   carouselControls: {
-    width: theme.spacing(10),
     float: 'right',
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: theme.spacing(2)
+    // marginTop: theme.spacing(2),
+    opacity: 0
   },
   btn: {
     cursor: 'pointer'
@@ -49,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const MOTION_VARIANTS = {
   btn: {
     enable: {
-      opacity: 0.3,
+      opacity: 1,
       scale: 1
     },
     disable: {
@@ -208,9 +207,9 @@ export default function Carousel({
     timeout.current = setTimeout(init, 1000);
     window.addEventListener('resize', initDebounced);
     docBody.current = document.body;
-    // myRef.current.addEventListener('touchstart', onTouchStart, true);
-    // myRef.current.addEventListener('touchmove', onTouchMove, true);
-    // myRef.current.addEventListener('touchend', onTouchEnd, true);
+    myRef.current.addEventListener('touchstart', onTouchStart, true);
+    myRef.current.addEventListener('touchmove', onTouchMove, true);
+    myRef.current.addEventListener('touchend', onTouchEnd, true);
     return () => {
       window.removeEventListener('resize', initDebounced);
       clearTimeout(timeout.current);
@@ -255,7 +254,15 @@ export default function Carousel({
         ))}
       </motion.div>
       {(upMd || forceControls) && (
-        <div className={cx(classes.carouselControls)}>
+        <motion.div
+          className={cx(classes.carouselControls)}
+          animate={{
+            opacity: 1
+          }}
+          transition={{
+            delay: 1
+          }}
+        >
           <div>
             <motion.div
               variants={MOTION_VARIANTS.btn}
@@ -272,7 +279,11 @@ export default function Carousel({
                 color: controsColor
               }}
             >
-              {leftControll || <ChevronLeft size={32} />}
+              {leftControll || (
+                <IconButton color='secondary'>
+                  <ChevronLeft size={32} />
+                </IconButton>
+              )}
             </motion.div>
           </div>
           <div>
@@ -292,10 +303,14 @@ export default function Carousel({
                 color: controsColor
               }}
             >
-              {rightControll || <ChevronRight size={32} />}
+              {rightControll || (
+                <IconButton color='secondary'>
+                  <ChevronRight size={32} />
+                </IconButton>
+              )}
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
