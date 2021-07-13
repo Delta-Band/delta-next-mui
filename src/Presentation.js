@@ -238,6 +238,7 @@ function Presentation({ slides, gaCategory }) {
       <Modal
         show={fullScreen}
         backdropOpacity={1}
+        fullScreen
         classNames={{
           modal: classes.gallery
         }}

@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import usePortal from 'react-useportal';
+import screenfull from 'screenfull';
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import cx from 'classnames';
@@ -33,57 +34,32 @@ export default function DeltaModal({
   onClose,
   children,
   classNames = {},
-  disableOrchstratedAnimation = false
+  fullScreen = false
 }) {
   const classes = useStyles();
   const { Portal } = usePortal();
+  const ref = useRef();
 
   useEffect(() => {
     if (show) {
+      if (fullScreen && screenfull.isEnabled) {
+        screenfull.request(ref.current);
+      }
       disableScroll.on();
     } else {
       disableScroll.off();
+      if (fullScreen && screenfull.isEnabled) {
+        screenfull.exit();
+      }
     }
   }, [show]);
 
-  const container = {
-    hidden: (disableOrchstratedAnimation) => ({
-      pointerEvents: 'none',
-      opacity: 0,
-      transition: {
-        bounce: 0,
-        when: disableOrchstratedAnimation ? undefined : 'afterChildren'
-      }
-    }),
-    show: (disableOrchstratedAnimation) => ({
-      pointerEvents: 'all',
-      opacity: 1,
-      transition: {
-        when: disableOrchstratedAnimation ? undefined : 'beforeChildren',
-        bounce: 0
-      }
-    })
-  };
-
-  const modal = {
-    hidden: (disableScaleAnimation) => ({
-      opacity: 0,
-      scale: disableScaleAnimation ? 1 : 0
-    }),
-    show: {
-      opacity: 1,
-      scale: 1
-    }
-  };
-
   return (
-    <Portal>
+    <Portal ref={ref}>
       <AnimatePresence>
         {show && (
           <motion.div
             className={classes.screenCover}
-            // variants={container}
-            // custom={disableOrchstratedAnimation}
             initial={{
               pointerEvents: 'none',
               opacity: 0,
