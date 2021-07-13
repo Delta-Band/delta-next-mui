@@ -267,6 +267,7 @@ function PdfViewer({ file, gaLabel }) {
           onItemWidthChange={(width) => {
             setWidth(width - 2);
           }}
+          onChange={setPageNumber}
         >
           {[...Array(numPages)].map((j, i) => (
             <Page

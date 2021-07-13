@@ -96,14 +96,15 @@ export default function Carousel({
   gaEventId = 'not_scpecified',
   forceControls = false,
   onItemWidthChange = () => {},
-  controsColor
+  controsColor,
+  onChange = () => {}
 }) {
   const classes = useStyles();
   const myRef = useRef();
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
   const upSm = useMediaQuery(theme.breakpoints.up('sm'));
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(forceIndex);
   const [itemWidth, setItemWidth] = useState(0);
   const [xPos, setXPos] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -197,32 +198,28 @@ export default function Carousel({
         (index === 0 ? 0 : (itemWidth * (visibleItems - 1)) / 2 + spacing / 2)
     );
     onItemWidthChange(itemWidth - spacing);
+    if (forceIndex !== index) {
+      onChange(index);
+    }
   }, [index, itemWidth]);
 
   useEffect(() => {
     timeout.current = setTimeout(init, 1000);
     window.addEventListener('resize', initDebounced);
     docBody.current = document.body;
-    myRef.current.addEventListener('touchstart', onTouchStart, true);
-    // myRef.current.addEventListener('mousedown', onTouchStart, true);
-    myRef.current.addEventListener('touchmove', onTouchMove, true);
-    // myRef.current.addEventListener('mousemove', onTouchMove, true);
-    myRef.current.addEventListener('touchend', onTouchEnd, true);
-    // myRef.current.addEventListener('mouseup', onTouchEnd, true);
+    // myRef.current.addEventListener('touchstart', onTouchStart, true);
+    // myRef.current.addEventListener('touchmove', onTouchMove, true);
+    // myRef.current.addEventListener('touchend', onTouchEnd, true);
     return () => {
       window.removeEventListener('resize', initDebounced);
       clearTimeout(timeout.current);
       if (myRef.current) {
         myRef.current.removeEventListener('touchstart', onTouchStart, true);
-        // myRef.current.removeEventListener('mousedown', onTouchStart, true);
         myRef.current.removeEventListener('touchmove', onTouchMove, true);
-        // myRef.current.removeEventListener('mousemove', onTouchMove, true);
         myRef.current.removeEventListener('touchend', onTouchMove, true);
-        // myRef.current.removeEventListener('mouseup', onTouchMove, true);
       }
       if (docBody.current) {
         docBody.current.removeEventListener('touchend', onTouchEnd, true);
-        // docBody.current.removeEventListener('mouseup', onTouchMove, true);
       }
     };
   }, []);
@@ -236,7 +233,7 @@ export default function Carousel({
   }, [visibleItems]);
 
   useEffect(() => {
-    setIndex(forceIndex);
+    if (forceIndex !== index) setIndex(forceIndex);
   }, [forceIndex]);
 
   return (

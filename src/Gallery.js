@@ -42,10 +42,10 @@ const Gallery = ({
   children,
   className,
   infinte = false,
-  forcePage = null,
+  forcePage = 0,
   onChange = () => {}
 }) => {
-  const [[page, direction], setPage] = useState([0, 0]);
+  const [[page, direction], setPage] = useState([forcePage, 0]);
   const classes = useStyles();
 
   // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -66,13 +66,16 @@ const Gallery = ({
   };
 
   useEffect(() => {
-    if (forcePage != null && forcePage != page) {
+    if (forcePage != page) {
+      debugger;
       setPage([forcePage, forcePage - page]);
     }
   }, [forcePage]);
 
   useEffect(() => {
-    onChange(page);
+    if (forcePage !== page) {
+      onChange(page);
+    }
   }, [page]);
 
   return (
