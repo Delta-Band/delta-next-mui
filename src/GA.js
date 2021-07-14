@@ -7,12 +7,19 @@ function init(trackingId, userId, options = {}) {
     myStorage.setItem('userId', userId);
   }
   if (process.env.NODE_ENV === 'production' || options.devMode) {
-    ReactGA.initialize(trackingId, {
-      debug: true,
-      gaOptions: {
-        userId: myStorage.getItem('userId')
-      }
-    });
+    const _uid = myStorage.getItem('userId');
+    if (_uid) {
+      ReactGA.initialize(trackingId, {
+        debug: true,
+        gaOptions: {
+          userId: myStorage.getItem('userId')
+        }
+      });
+    } else {
+      ReactGA.initialize(trackingId, {
+        debug: true
+      });
+    }
   }
 }
 
