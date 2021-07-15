@@ -10,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
   footerRoot: {
     width: '100%',
     padding: theme.spacing(4),
+    paddingTop: theme.spacing(6),
+    paddingBottom: theme.spacing(6),
     boxSizing: 'border-box'
   },
   smallTxt: {
@@ -35,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end',
     '& $inheritColor': {
       display: 'inline-block'
+    },
+    [theme.breakpoints.up('ipad')]: {
+      alignItems: 'flex-start'
     }
   },
   socialIconWrapper: {
@@ -121,10 +126,8 @@ function Footer({
 }) {
   const classes = useStyles();
   const theme = useTheme();
-  const upSm = useMediaQuery(theme.breakpoints.up('sm'));
-  const upMd = useMediaQuery(theme.breakpoints.up('md'));
-  const upLg = useMediaQuery(theme.breakpoints.up('lg'));
-  const upXl = useMediaQuery(theme.breakpoints.up('xl'));
+  const upIpad = useMediaQuery(theme.breakpoints.up('ipad'));
+  const upLaptop = useMediaQuery(theme.breakpoints.up('laptop'));
 
   return (
     <div
@@ -133,8 +136,14 @@ function Footer({
         backgroundColor: bgColor
       }}
     >
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
+      <Grid
+        container
+        spacing={upIpad ? 6 : 4}
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
+      >
+        <Grid item xs={upIpad ? 6 : 12}>
           <img src={logo} />
           <Typography
             className={cx(classes.smallTxt)}
@@ -145,7 +154,7 @@ function Footer({
             ©2021. All rights reserved {companyName}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={upIpad ? 6 : 12}>
           <Typography
             className={cx(classes.title)}
             style={{
@@ -160,7 +169,7 @@ function Footer({
             <BigTxt>{addressSecondLine}</BigTxt>
           </Link>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={upIpad ? 6 : 12}>
           <Typography
             className={cx(classes.title)}
             style={{
@@ -180,7 +189,7 @@ function Footer({
             <BigTxt>{email}</BigTxt>
           </Link>
         </Grid>
-        <Grid item xs={12} className={classes.alignOpisit}>
+        <Grid item xs={upIpad ? 6 : 12} className={classes.alignOpisit}>
           <div
             className={cx(classes.socialLinks)}
             style={{
@@ -193,6 +202,8 @@ function Footer({
           </div>
           <motion.a
             href={privacyPolicyLink}
+            target='_blank'
+            rel='noopener'
             className={cx(classes.privacy)}
             style={{
               textDecorationThickness: 1,

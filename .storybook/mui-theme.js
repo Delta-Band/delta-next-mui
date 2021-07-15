@@ -4,6 +4,19 @@ const defaultTheme = createMuiTheme();
 const { breakpoints } = defaultTheme;
 
 const theme = createMuiTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+      ipad: 765,
+      laptop: 1024,
+      desktop: 1280,
+      widescreen: 1920
+    }
+  },
   palette: {
     primary: {
       light: '#757ce8',

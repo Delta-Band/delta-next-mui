@@ -19,15 +19,12 @@ export default {
 
 const useStyles = makeStyles((theme) => ({
   page: {
-    height: '100%',
+    minHeight: '100vh',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    position: 'absolute',
-    top: 0,
-    left: 0
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
   }
 }));
 
