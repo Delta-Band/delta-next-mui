@@ -1,9 +1,7 @@
 import React from 'react';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import cx from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { Presentation } from '../../src';
-import file from './pdf_test.pdf';
 
 // console.log('INITIAL_VIEWPORTS:, ', INITIAL_VIEWPORTS);
 
