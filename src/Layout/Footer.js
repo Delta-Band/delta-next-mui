@@ -127,6 +127,8 @@ function SocialIcon({ children, bgColor, textColor, link }) {
   return (
     <motion.a
       href={link}
+      target='_blank'
+      rel='noopener'
       className={classes.socialIconWrapper}
       style={{
         color: textColor
