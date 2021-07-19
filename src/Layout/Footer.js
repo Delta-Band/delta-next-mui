@@ -121,11 +121,12 @@ function BigTxt({ children }) {
   );
 }
 
-function SocialIcon({ children, bgColor, textColor }) {
+function SocialIcon({ children, bgColor, textColor, link }) {
   const classes = useStyles();
 
   return (
-    <motion.div
+    <motion.a
+      href={link}
       className={classes.socialIconWrapper}
       style={{
         color: textColor
@@ -136,7 +137,7 @@ function SocialIcon({ children, bgColor, textColor }) {
       }}
     >
       {children}
-    </motion.div>
+    </motion.a>
   );
 }
 
@@ -157,7 +158,8 @@ function Footer({
   emailBody = '',
   privacyPolicyLink,
   termsAndConditionsLink,
-  maxWidth = 1920
+  maxWidth = 1920,
+  linkedIn = ''
 }) {
   const classes = useStyles();
   const theme = useTheme();
@@ -267,7 +269,7 @@ function Footer({
               color: textColor
             }}
           >
-            <SocialIcon bgColor={bgColor} textColor={textColor}>
+            <SocialIcon bgColor={bgColor} textColor={textColor} link={linkedIn}>
               <LinkedinIcon size={32} color='inherit' />
             </SocialIcon>
           </div>
