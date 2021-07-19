@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 1.8
   },
   link: {
-    textDecoration: 'none'
+    textDecoration: 'none',
+    cursor: 'pointer'
   },
   inheritColor: {
     color: 'inherit'
