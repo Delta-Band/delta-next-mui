@@ -4,6 +4,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import cx from 'classnames';
 import { Typography, Grid } from '@material-ui/core';
 import { motion } from 'framer-motion';
+import { default as NextLink } from 'next/link';
 import { Linkedin as LinkedinIcon } from '@styled-icons/boxicons-logos/Linkedin';
 
 const useStyles = makeStyles((theme) => ({
@@ -12,7 +13,26 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     paddingTop: theme.spacing(6),
     paddingBottom: theme.spacing(6),
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    [theme.breakpoints.up('laptop')]: {
+      padding: '4vw',
+      paddingTop: theme.spacing(6),
+      paddingBottom: theme.spacing(4)
+    }
+    // [theme.breakpoints.up('desktop')]: {
+    //   padding: theme.spacing(10)
+    // }
+  },
+  gridItem: {
+    height: '100%'
+  },
+  logo: {
+    [theme.breakpoints.up('ipad')]: {
+      // paddingTop: theme.spacing(1.5)
+    }
   },
   smallTxt: {
     fontWeight: 100,
@@ -29,7 +49,10 @@ const useStyles = makeStyles((theme) => ({
     color: 'inherit'
   },
   title: {
-    opacity: 0.5
+    opacity: 0.5,
+    marginBottom: theme.spacing(1),
+    lineHeight: '1.2em',
+    fontSize: 16
   },
   alignOpisit: {
     display: 'flex',
@@ -40,6 +63,10 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up('ipad')]: {
       alignItems: 'flex-start'
+    },
+    [theme.breakpoints.up('desktop')]: {
+      alignItems: 'flex-start',
+      alignItems: 'flex-end'
     }
   },
   socialIconWrapper: {
@@ -48,10 +75,15 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: theme.spacing(0.5)
+    borderRadius: theme.spacing(0.5),
+    cursor: 'pointer'
   },
   socialLinks: {
-    display: 'inline-flex'
+    display: 'inline-flex',
+    [theme.breakpoints.up('desktop')]: {
+      // paddingTop: theme.spacing(0.5),
+      // paddingBottom: theme.spacing(0)
+    }
   }
 }));
 
@@ -118,16 +150,18 @@ function Footer({
   addressFirstLine = '',
   addressSecondLine = '',
   addressLink,
-  phone = '+972 54 12 23',
+  phone,
   email = 'example@brand.com',
   emailSubject = '',
   emailBody = '',
-  privacyPolicyLink
+  privacyPolicyLink,
+  maxWidth = 1920
 }) {
   const classes = useStyles();
   const theme = useTheme();
   const upIpad = useMediaQuery(theme.breakpoints.up('ipad'));
   const upLaptop = useMediaQuery(theme.breakpoints.up('laptop'));
+  const upDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
 
   return (
     <div
@@ -138,13 +172,33 @@ function Footer({
     >
       <Grid
         container
-        spacing={upIpad ? 6 : 4}
+        spacing={4}
         direction='row'
-        justifyContent='space-between'
+        justify='space-between'
         alignItems='center'
+        style={{
+          maxWidth: maxWidth
+        }}
       >
-        <Grid item xs={upIpad ? 6 : 12}>
-          <img src={logo} />
+        <Grid
+          item
+          xs={upLaptop ? 'auto' : upIpad ? 6 : 12}
+          className={classes.gridItem}
+        >
+          <NextLink href='/'>
+            <a>
+              <motion.img
+                style={{
+                  transformOrigin: 'left center'
+                }}
+                whileHover={{
+                  scale: 1.1
+                }}
+                src={logo}
+                className={classes.logo}
+              />
+            </a>
+          </NextLink>
           <Typography
             className={cx(classes.smallTxt)}
             style={{
@@ -154,7 +208,11 @@ function Footer({
             ©2021. All rights reserved {companyName}
           </Typography>
         </Grid>
-        <Grid item xs={upIpad ? 6 : 12}>
+        <Grid
+          item
+          xs={upLaptop ? 'auto' : upIpad ? 6 : 12}
+          className={classes.gridItem}
+        >
           <Typography
             className={cx(classes.title)}
             style={{
@@ -165,11 +223,23 @@ function Footer({
             {visitTxt}
           </Typography>
           <Link href={addressLink} color={textColor}>
-            <BigTxt>{addressFirstLine}</BigTxt>
-            <BigTxt>{addressSecondLine}</BigTxt>
+            {phone ? (
+              <>
+                <BigTxt>{addressFirstLine}</BigTxt>
+                <BigTxt>{addressSecondLine}</BigTxt>
+              </>
+            ) : (
+              <BigTxt>
+                {addressFirstLine} {addressSecondLine}
+              </BigTxt>
+            )}
           </Link>
         </Grid>
-        <Grid item xs={upIpad ? 6 : 12}>
+        <Grid
+          item
+          xs={upLaptop ? 'auto' : upIpad ? 6 : 12}
+          className={classes.gridItem}
+        >
           <Typography
             className={cx(classes.title)}
             style={{
@@ -179,9 +249,11 @@ function Footer({
           >
             {concatTxt}
           </Typography>
-          <Link href={`tel:${phone.replace(/\s/g, '')}`} color={textColor}>
-            <BigTxt>{phone}</BigTxt>
-          </Link>
+          {phone && (
+            <Link href={`tel:${phone.replace(/\s/g, '')}`} color={textColor}>
+              <BigTxt>{phone}</BigTxt>
+            </Link>
+          )}
           <Link
             href={`mailto:${email}?subject=${emailSubject}&body=${emailBody}`}
             color={textColor}
@@ -189,7 +261,11 @@ function Footer({
             <BigTxt>{email}</BigTxt>
           </Link>
         </Grid>
-        <Grid item xs={upIpad ? 6 : 12} className={classes.alignOpisit}>
+        <Grid
+          item
+          xs={upDesktop ? 'auto' : upIpad ? 6 : 12}
+          className={cx(classes.alignOpisit, classes.gridItem)}
+        >
           <div
             className={cx(classes.socialLinks)}
             style={{

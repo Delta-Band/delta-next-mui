@@ -46,7 +46,7 @@ Thin.args = {
   addressFirstLine: '20 W Kinzie St Chicago,',
   addressSecondLine: 'IL, USA 60654',
   addressLink: 'https://goo.gl/maps/btMpX6B2JHnJqoZJA',
-  phone: '+972 3 171 4324',
+  // phone: '+972 3 171 4324',
   email: 'info@brand.com',
   emailSubject: 'Nice to Meet you',
   emailBody: 'Dear Brand team, ',
