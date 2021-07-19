@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('laptop')]: {
       padding: '4vw',
       paddingTop: theme.spacing(6),
-      paddingBottom: theme.spacing(4)
+      paddingBottom: theme.spacing(5)
     }
   },
   gridItem: {
@@ -31,11 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
   smallTxt: {
     fontWeight: 100,
-    fontSize: 14
+    fontSize: 14,
+    lineHeight: 2.5
   },
   bigTxt: {
     fontSize: 20,
-    fontWeight: 700
+    fontWeight: 700,
+    lineHeight: 1.8
   },
   link: {
     textDecoration: 'none'
@@ -47,7 +49,10 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.5,
     marginBottom: theme.spacing(1),
     lineHeight: '1.2em',
-    fontSize: 16
+    fontSize: 16,
+    [theme.breakpoints.up('ipad')]: {
+      marginTop: theme.spacing(1)
+    }
   },
   alignOpisit: {
     display: 'flex',
@@ -138,9 +143,7 @@ function Footer({
   visitTxt = 'VISIT US',
   concatTxt = 'CONTACT US',
   titlesFontFamily,
-  addressFirstLine = '',
-  addressSecondLine = '',
-  addressLink,
+  address = [],
   phone,
   email = 'example@brand.com',
   emailSubject = '',
@@ -166,7 +169,7 @@ function Footer({
         spacing={4}
         direction='row'
         justify='space-between'
-        alignItems='center'
+        alignItems='flex-start'
         style={{
           maxWidth: maxWidth
         }}
@@ -213,18 +216,11 @@ function Footer({
           >
             {visitTxt}
           </Typography>
-          <Link href={addressLink} color={textColor}>
-            {phone ? (
-              <>
-                <BigTxt>{addressFirstLine}</BigTxt>
-                <BigTxt>{addressSecondLine}</BigTxt>
-              </>
-            ) : (
-              <BigTxt>
-                {addressFirstLine} {addressSecondLine}
-              </BigTxt>
-            )}
-          </Link>
+          {address.map((item) => (
+            <Link href={item.link} color={textColor}>
+              <BigTxt>{item.text}</BigTxt>
+            </Link>
+          ))}
         </Grid>
         <Grid
           item
