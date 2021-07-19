@@ -22,17 +22,12 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: theme.spacing(6),
       paddingBottom: theme.spacing(4)
     }
-    // [theme.breakpoints.up('desktop')]: {
-    //   padding: theme.spacing(10)
-    // }
   },
   gridItem: {
     height: '100%'
   },
   logo: {
-    [theme.breakpoints.up('ipad')]: {
-      // paddingTop: theme.spacing(1.5)
-    }
+    [theme.breakpoints.up('ipad')]: {}
   },
   smallTxt: {
     fontWeight: 100,
@@ -79,11 +74,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer'
   },
   socialLinks: {
-    display: 'inline-flex',
-    [theme.breakpoints.up('desktop')]: {
-      // paddingTop: theme.spacing(0.5),
-      // paddingBottom: theme.spacing(0)
-    }
+    display: 'inline-flex'
   }
 }));
 
