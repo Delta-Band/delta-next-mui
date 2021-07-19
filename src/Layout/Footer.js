@@ -225,7 +225,7 @@ function Footer({
             {visitTxt}
           </Typography>
           {address.map((item) => (
-            <Link href={item.link} color={textColor}>
+            <Link href={item.link} color={textColor} key={item.text}>
               <BigTxt>{item.text}</BigTxt>
             </Link>
           ))}
