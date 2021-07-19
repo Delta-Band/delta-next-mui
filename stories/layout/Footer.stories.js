@@ -57,7 +57,8 @@ Thin.args = {
   email: 'info@brand.com',
   emailSubject: 'Nice to Meet you',
   emailBody: 'Dear Brand team, ',
-  privacyPolicyLink: 'https:/delta.band'
+  privacyPolicyLink: 'https:/delta.band',
+  termsAndConditionsLink: 'https:/delta.band'
 };
 
 Thin.parameters = {

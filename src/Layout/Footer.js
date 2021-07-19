@@ -80,6 +80,13 @@ const useStyles = makeStyles((theme) => ({
   },
   socialLinks: {
     display: 'inline-flex'
+  },
+  privacyAndTermsContainer: {
+    display: 'flex'
+  },
+  pipe: {
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1)
   }
 }));
 
@@ -149,6 +156,7 @@ function Footer({
   emailSubject = '',
   emailBody = '',
   privacyPolicyLink,
+  termsAndConditionsLink,
   maxWidth = 1920
 }) {
   const classes = useStyles();
@@ -263,24 +271,56 @@ function Footer({
               <LinkedinIcon size={32} color='inherit' />
             </SocialIcon>
           </div>
-          <motion.a
-            href={privacyPolicyLink}
-            target='_blank'
-            rel='noopener'
-            className={cx(classes.privacy)}
-            style={{
-              textDecorationThickness: 1,
-              opacity: 0.5,
-              color: textColor
-            }}
-            whileHover={{
-              opacity: 1
-            }}
-          >
-            <Typography className={cx(classes.inheritColor, classes.smallTxt)}>
-              Privacy Policy + Terms &amp; Conditions
+          <div className={classes.privacyAndTermsContainer}>
+            <motion.a
+              href={privacyPolicyLink}
+              target='_blank'
+              rel='noopener'
+              className={cx(classes.privacy)}
+              style={{
+                textDecorationThickness: 1,
+                opacity: 0.5,
+                color: textColor
+              }}
+              whileHover={{
+                opacity: 1
+              }}
+            >
+              <Typography
+                className={cx(classes.inheritColor, classes.smallTxt)}
+              >
+                Privacy Policy
+              </Typography>
+            </motion.a>
+            <Typography
+              className={cx(classes.pipe, classes.smallTxt)}
+              style={{
+                color: textColor
+              }}
+            >
+              |
             </Typography>
-          </motion.a>
+            <motion.a
+              href={termsAndConditionsLink}
+              target='_blank'
+              rel='noopener'
+              className={cx(classes.privacy)}
+              style={{
+                textDecorationThickness: 1,
+                opacity: 0.5,
+                color: textColor
+              }}
+              whileHover={{
+                opacity: 1
+              }}
+            >
+              <Typography
+                className={cx(classes.inheritColor, classes.smallTxt)}
+              >
+                Terms &amp; Conditions
+              </Typography>
+            </motion.a>
+          </div>
         </Grid>
       </Grid>
     </div>
