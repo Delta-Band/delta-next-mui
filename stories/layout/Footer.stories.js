@@ -2,8 +2,10 @@ import React from 'react';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import cx from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
-import { Footer } from '../../src';
+import { Footer, GA } from '../../src';
 import logo from './footer_logo.svg';
+
+GA.init('UA-177908744-1', undefined, { devMode: true });
 
 // console.log('INITIAL_VIEWPORTS:, ', INITIAL_VIEWPORTS);
 
@@ -50,7 +52,7 @@ Thin.args = {
         'https://maps.google.com/maps?q=1375%20W%20Fulton%20St,%20Chicago,%20IL%2060607,%20USA&t=&z=13&ie=UTF8&iwloc=&output=embed'
     },
     {
-      text: '20 W Kinzie St Chicago, IL, USA 60654',
+      text: '20 W Kinzie St Chicago, IL, USA 606542',
       link:
         'https://maps.google.com/maps?q=1375%20W%20Fulton%20St,%20Chicago,%20IL%2060607,%20USA&t=&z=13&ie=UTF8&iwloc=&output=embed'
     }

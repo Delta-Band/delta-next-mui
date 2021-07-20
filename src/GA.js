@@ -2,17 +2,22 @@ import ReactGA from 'react-ga';
 
 function init(trackingId, userId, options = {}) {
   const myStorage = window.localStorage;
-  const uid = myStorage.getItem('userId');
-  if (uid !== userId) {
+  let uid = myStorage.getItem('userId');
+  if (uid === 'undefined') {
+    // clear leftovers from old bug
+    myStorage.removeItem('userId');
+    uid = myStorage.getItem('userId');
+  }
+  if (userId && uid !== userId) {
     myStorage.setItem('userId', userId);
   }
   if (process.env.NODE_ENV === 'production' || options.devMode) {
-    const _uid = myStorage.getItem('userId');
-    if (_uid) {
+    uid = myStorage.getItem('userId');
+    if (uid) {
       ReactGA.initialize(trackingId, {
         debug: true,
         gaOptions: {
-          userId: myStorage.getItem('userId')
+          userId: uid
         }
       });
     } else {
