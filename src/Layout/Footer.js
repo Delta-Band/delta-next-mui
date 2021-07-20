@@ -8,6 +8,7 @@ import { default as NextLink } from 'next/link';
 import { Linkedin as LinkedinIcon } from '@styled-icons/boxicons-logos/Linkedin';
 import Reader from '../Gadgets/Reader';
 import Iframe from '../Gadgets/Iframe';
+import GA from '../GA';
 
 const useStyles = makeStyles((theme) => ({
   footerRoot: {
@@ -207,6 +208,9 @@ function Footer({
                 }}
                 src={logo}
                 className={classes.logo}
+                onClick={() => {
+                  GA.event('Footer', 'User clicked on logo link');
+                }}
               />
             </a>
           </NextLink>
@@ -240,7 +244,13 @@ function Footer({
               key={item.text}
               setOpenReader={setOpenReader}
             >
-              <BigTxt>{item.text}</BigTxt>
+              <BigTxt
+                onClick={() => {
+                  GA.event('Footer', 'User clicked on address link');
+                }}
+              >
+                {item.text}
+              </BigTxt>
             </Link>
           ))}
         </Grid>
@@ -260,14 +270,26 @@ function Footer({
           </Typography>
           {phone && (
             <Link href={`tel:${phone.replace(/\s/g, '')}`} color={textColor}>
-              <BigTxt>{phone}</BigTxt>
+              <BigTxt
+                onClick={() => {
+                  GA.event('Footer', 'User clicked on phone link');
+                }}
+              >
+                {phone}
+              </BigTxt>
             </Link>
           )}
           <Link
             href={`mailto:${email}?subject=${emailSubject}&body=${emailBody}`}
             color={textColor}
           >
-            <BigTxt>{email}</BigTxt>
+            <BigTxt
+              onClick={() => {
+                GA.event('Footer', 'User clicked on email link');
+              }}
+            >
+              {email}
+            </BigTxt>
           </Link>
         </Grid>
         <Grid
@@ -282,7 +304,13 @@ function Footer({
             }}
           >
             <SocialIcon bgColor={bgColor} textColor={textColor} link={linkedIn}>
-              <LinkedinIcon size={32} color='inherit' />
+              <LinkedinIcon
+                size={32}
+                color='inherit'
+                onClick={() => {
+                  GA.event('Footer', 'User clicked linkedIn icon');
+                }}
+              />
             </SocialIcon>
           </div>
           <div className={classes.privacyAndTermsContainer}>
@@ -292,6 +320,7 @@ function Footer({
               // rel='noopener'
               onClick={() => {
                 setOpenReader(privacyPolicyLink);
+                GA.event('Footer', 'User clicked on privacy link');
               }}
               className={cx(classes.privacy)}
               style={{
@@ -323,6 +352,7 @@ function Footer({
               // rel='noopener'
               onClick={() => {
                 setOpenReader(termsAndConditionsLink);
+                GA.event('Footer', 'User clicked on terms link');
               }}
               className={cx(classes.privacy)}
               style={{
