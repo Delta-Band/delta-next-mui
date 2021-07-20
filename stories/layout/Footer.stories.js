@@ -46,11 +46,13 @@ Thin.args = {
   address: [
     {
       text: '20 W Kinzie St Chicago, IL, USA 60654',
-      link: 'https://goo.gl/maps/btMpX6B2JHnJqoZJA'
+      link:
+        'https://maps.google.com/maps?q=1375%20W%20Fulton%20St,%20Chicago,%20IL%2060607,%20USA&t=&z=13&ie=UTF8&iwloc=&output=embed'
     },
     {
       text: '20 W Kinzie St Chicago, IL, USA 60654',
-      link: 'https://goo.gl/maps/btMpX6B2JHnJqoZJA'
+      link:
+        'https://maps.google.com/maps?q=1375%20W%20Fulton%20St,%20Chicago,%20IL%2060607,%20USA&t=&z=13&ie=UTF8&iwloc=&output=embed'
     }
   ],
   // phone: '+972 3 171 4324',

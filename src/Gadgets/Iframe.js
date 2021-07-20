@@ -23,13 +23,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Iframe({ src }) {
+function Iframe({ src, overflowHidden = false }) {
   const classes = useStyles();
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
 
   return (
-    <div className={classes.iframeRoot}>
+    <div
+      className={classes.iframeRoot}
+      style={{
+        overflow: overflowHidden ? 'hidden' : 'auto'
+      }}
+    >
       <iframe
         src={src}
         loading='loading...'

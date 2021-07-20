@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import cx from 'classnames';
@@ -6,6 +6,8 @@ import { Typography, Grid } from '@material-ui/core';
 import { motion } from 'framer-motion';
 import { default as NextLink } from 'next/link';
 import { Linkedin as LinkedinIcon } from '@styled-icons/boxicons-logos/Linkedin';
+import Reader from '../Gadgets/Reader';
+import Iframe from '../Gadgets/Iframe';
 
 const useStyles = makeStyles((theme) => ({
   footerRoot: {
@@ -83,7 +85,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-flex'
   },
   privacyAndTermsContainer: {
-    display: 'flex'
+    display: 'flex',
+    cursor: 'pointer'
   },
   pipe: {
     marginRight: theme.spacing(1),
@@ -91,15 +94,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Link({ children, href, color }) {
+function Link({ children, href, color, setOpenReader, setOverflowHidden }) {
   const classes = useStyles();
   const theme = useTheme();
 
   return (
     <motion.a
-      href={href}
-      target='_blank'
-      rel='noopener'
+      onClick={() => {
+        setOpenReader(href);
+        setOverflowHidden(true);
+      }}
       className={cx(classes.link)}
       style={{
         color
@@ -169,6 +173,8 @@ function Footer({
   const upIpad = useMediaQuery(theme.breakpoints.up('ipad'));
   const upLaptop = useMediaQuery(theme.breakpoints.up('laptop'));
   const upDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
+  const [openReader, setOpenReader] = useState(null);
+  const [overflowHidden, setOverflowHidden] = useState(false);
 
   return (
     <div
@@ -230,7 +236,13 @@ function Footer({
             {visitTxt}
           </Typography>
           {address.map((item) => (
-            <Link href={item.link} color={textColor} key={item.text}>
+            <Link
+              href={item.link}
+              color={textColor}
+              key={item.text}
+              setOpenReader={setOpenReader}
+              setOverflowHidden={setOverflowHidden}
+            >
               <BigTxt>{item.text}</BigTxt>
             </Link>
           ))}
@@ -278,9 +290,13 @@ function Footer({
           </div>
           <div className={classes.privacyAndTermsContainer}>
             <motion.a
-              href={privacyPolicyLink}
-              target='_blank'
-              rel='noopener'
+              // href={privacyPolicyLink}
+              // target='_blank'
+              // rel='noopener'
+              onClick={() => {
+                setOpenReader(privacyPolicyLink);
+                setOverflowHidden(false);
+              }}
               className={cx(classes.privacy)}
               style={{
                 textDecorationThickness: 1,
@@ -306,9 +322,13 @@ function Footer({
               |
             </Typography>
             <motion.a
-              href={termsAndConditionsLink}
-              target='_blank'
-              rel='noopener'
+              // href={termsAndConditionsLink}
+              // target='_blank'
+              // rel='noopener'
+              onClick={() => {
+                setOpenReader(termsAndConditionsLink);
+                setOverflowHidden(false);
+              }}
               className={cx(classes.privacy)}
               style={{
                 textDecorationThickness: 1,
@@ -328,6 +348,16 @@ function Footer({
           </div>
         </Grid>
       </Grid>
+      <Reader
+        noBleed
+        open={openReader}
+        onClose={() => {
+          setOpenReader(null);
+          setOverflowHidden(false);
+        }}
+      >
+        <Iframe src={openReader} overflowHidden={overflowHidden} />
+      </Reader>
     </div>
   );
 }
