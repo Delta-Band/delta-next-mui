@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     border: 'none',
-    position: 'reltaive'
+    position: 'reltaive',
+    overflow: 'hidden'
   },
   iframe: {
     width: '100%',
@@ -29,12 +30,7 @@ function Iframe({ src, overflowHidden = false }) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div
-      className={classes.iframeRoot}
-      style={{
-        overflow: overflowHidden ? 'hidden' : 'auto'
-      }}
-    >
+    <div className={classes.iframeRoot}>
       <iframe
         src={src}
         loading='loading...'

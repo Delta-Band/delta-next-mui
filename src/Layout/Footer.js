@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Link({ children, href, color, setOpenReader, setOverflowHidden }) {
+function Link({ children, href, color, setOpenReader }) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -102,7 +102,6 @@ function Link({ children, href, color, setOpenReader, setOverflowHidden }) {
     <motion.a
       onClick={() => {
         setOpenReader(href);
-        setOverflowHidden(true);
       }}
       className={cx(classes.link)}
       style={{
@@ -174,7 +173,6 @@ function Footer({
   const upLaptop = useMediaQuery(theme.breakpoints.up('laptop'));
   const upDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
   const [openReader, setOpenReader] = useState(null);
-  const [overflowHidden, setOverflowHidden] = useState(false);
 
   return (
     <div
@@ -241,7 +239,6 @@ function Footer({
               color={textColor}
               key={item.text}
               setOpenReader={setOpenReader}
-              setOverflowHidden={setOverflowHidden}
             >
               <BigTxt>{item.text}</BigTxt>
             </Link>
@@ -295,7 +292,6 @@ function Footer({
               // rel='noopener'
               onClick={() => {
                 setOpenReader(privacyPolicyLink);
-                setOverflowHidden(false);
               }}
               className={cx(classes.privacy)}
               style={{
@@ -327,7 +323,6 @@ function Footer({
               // rel='noopener'
               onClick={() => {
                 setOpenReader(termsAndConditionsLink);
-                setOverflowHidden(false);
               }}
               className={cx(classes.privacy)}
               style={{
@@ -353,10 +348,9 @@ function Footer({
         open={openReader}
         onClose={() => {
           setOpenReader(null);
-          setOverflowHidden(false);
         }}
       >
-        <Iframe src={openReader} overflowHidden={overflowHidden} />
+        <Iframe src={openReader} />
       </Reader>
     </div>
   );
