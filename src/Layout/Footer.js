@@ -95,14 +95,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Link({ children, href, color, setOpenReader }) {
+function Link({ children, href, color, setOpenReader, noReader }) {
   const classes = useStyles();
   const theme = useTheme();
 
   return (
     <motion.a
+      rel='noopener noreferrer'
+      target='_blank'
+      href={noReader ? href : undefined}
       onClick={() => {
-        setOpenReader(href);
+        if (!noReader) {
+          setOpenReader(href);
+        }
       }}
       className={cx(classes.link)}
       style={{
@@ -282,6 +287,7 @@ function Footer({
           <Link
             href={`mailto:${email}?subject=${emailSubject}&body=${emailBody}`}
             color={textColor}
+            noReader
           >
             <BigTxt
               onClick={() => {
