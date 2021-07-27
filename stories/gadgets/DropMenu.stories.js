@@ -51,6 +51,7 @@ const Template = (args) => {
   return (
     <div style={{ height: '100%', padding: 40 }}>
       <DropMenu
+        {...args}
         menu={
           <div className={classes.menuInner}>
             {['item 1', 'item 2', 'item 3'].map((_item) => (
@@ -72,7 +73,9 @@ const Template = (args) => {
 };
 
 export const Default = Template.bind({});
-// Default.args = {};
+Default.args = {
+  location: 'bottomRight'
+};
 Default.parameters = {
   viewport: {
     defaultViewport: 'iphone6'

@@ -4,6 +4,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import disableScroll from 'disable-scroll';
 import { motion } from 'framer-motion';
 import onClickOutside from 'react-onclickoutside';
+import cx from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
   trigger: {
     cursor: 'pointer',
     position: 'relative'
+  },
+  bottomRight: {
+    left: 'unset',
+    right: 0
   }
 }));
 
@@ -103,7 +108,7 @@ const dropMenu = {
   }
 };
 
-function DropMenu({ children, menu }) {
+function DropMenu({ children, menu, location = 'bottomLeft' }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const theme = useTheme();
@@ -138,7 +143,7 @@ function DropMenu({ children, menu }) {
             variants={dropMenu}
             initial='close'
             animate={open ? 'open' : 'close'}
-            className={classes.dropMenu}
+            className={cx(classes.dropMenu, classes[location])}
           >
             {menu}
           </motion.div>
