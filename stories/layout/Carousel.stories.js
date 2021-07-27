@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Template = (args) => {
   const classes = useStyles();
+
   return (
     <div className={classes.page}>
       <Carousel {...args}>
