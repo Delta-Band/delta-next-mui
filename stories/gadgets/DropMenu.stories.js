@@ -58,7 +58,9 @@ const Template = (args) => {
               <div
                 key={_item}
                 className={classes.menuItem}
-                onClick={() => selectItem(_item)}
+                onClick={() => {
+                  selectItem(_item);
+                }}
               >
                 <Typography>{_item}</Typography>
               </div>
@@ -74,7 +76,7 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  location: 'bottomRight'
+  // location: 'bottomRight'
 };
 Default.parameters = {
   viewport: {
