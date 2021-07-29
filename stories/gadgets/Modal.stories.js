@@ -46,10 +46,12 @@ const Template = (args) => {
       >
         Open Modal
       </Button>
-      <Modal show={isOpen} onClose={() => setIsOpen(false)}>
-        <div className={classes.modal}>
-          <Typography>I am a Modal</Typography>
-        </div>
+      <Modal
+        show={isOpen}
+        className={classes.modal}
+        onClose={() => setIsOpen(false)}
+      >
+        <Typography>I am a Modal</Typography>
       </Modal>
     </div>
   );

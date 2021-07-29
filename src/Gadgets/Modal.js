@@ -32,7 +32,7 @@ export default function DeltaModal({
   show,
   onClose,
   children,
-  classNames = {},
+  className,
   fullScreen = false,
   backDropColor = 'rgba(0, 0, 0, 0.8)'
 }) {
@@ -92,7 +92,7 @@ export default function DeltaModal({
             >
               <motion.div
                 onClick={onClose}
-                className={cx(classes.modal, classNames.modal)}
+                className={cx(classes.modal, className)}
                 initial={{
                   opacity: 0,
                   scale: 0
