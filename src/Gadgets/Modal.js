@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     height: '100%',
     width: '100vw',
-    background: 'rgb(0, 0, 0)',
     backdropFilter: 'blur(17px)',
     display: 'flex',
     alignItems: 'center',
@@ -34,7 +33,8 @@ export default function DeltaModal({
   onClose,
   children,
   classNames = {},
-  fullScreen = false
+  fullScreen = false,
+  backDropColor = 'rgba(0, 0, 0, 0.8)'
 }) {
   const classes = useStyles();
   const { Portal } = usePortal();
@@ -61,6 +61,9 @@ export default function DeltaModal({
           {show && (
             <motion.div
               className={classes.screenCover}
+              style={{
+                background: backDropColor
+              }}
               initial={{
                 pointerEvents: 'none',
                 opacity: 0,

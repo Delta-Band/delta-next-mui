@@ -8,7 +8,7 @@ import cx from 'classnames';
 import { FullscreenExit as ExitIcon } from '@styled-icons/remix-fill/FullscreenExit';
 import { Restart as RestartIcon } from '@styled-icons/remix-line/Restart';
 import Carousel from '../Layout/Carousel';
-import Modal from '../Layout/Modal';
+import Modal from '../Gadgets/Modal';
 import GA from '../GA';
 
 const useStyles = makeStyles((theme) => ({
