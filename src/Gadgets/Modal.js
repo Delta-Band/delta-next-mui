@@ -105,6 +105,7 @@ export default function DeltaModal({
                   opacity: 0,
                   scale: 0
                 }}
+                onClick={(e) => e.stopPropagation()}
               >
                 {children}
               </motion.div>
