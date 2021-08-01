@@ -76,8 +76,8 @@ export default function DeltaModal({
   return (
     <Portal>
       <AnimatePresence>
-        <div ref={ref}>
-          {show && (
+        {show && (
+          <div ref={ref}>
             <motion.div
               className={classes.screenCover}
               style={{
@@ -129,8 +129,8 @@ export default function DeltaModal({
                 {children}
               </motion.div>
             </motion.div>
-          )}
-        </div>
+          </div>
+        )}
       </AnimatePresence>
     </Portal>
   );
