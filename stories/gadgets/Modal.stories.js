@@ -7,6 +7,9 @@ import { Modal } from '../../src';
 export default {
   title: 'Gadgets/Modal',
   component: Modal,
+  argTypes: {
+    onClose: { action: 'closed' }
+  },
   parameters: {
     viewport: INITIAL_VIEWPORTS,
     defaultViewport: 'iphone6'

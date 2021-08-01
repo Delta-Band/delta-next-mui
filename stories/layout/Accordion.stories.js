@@ -8,7 +8,7 @@ import { Accordion } from '../../src';
 export default {
   title: 'Layout/Accordion',
   component: Accordion,
-  argTypes: { onChange: { action: 'changed' } },
+  argTypes: { onKeyPress: { action: 'onKeyPress' } },
   parameters: {
     viewport: INITIAL_VIEWPORTS,
     defaultViewport: 'iphone6'

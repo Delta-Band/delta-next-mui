@@ -34,7 +34,8 @@ export default function DeltaModal({
   children,
   className,
   fullScreen = false,
-  backDropColor = 'rgba(0, 0, 0, 0.8)'
+  backDropColor = 'rgba(0, 0, 0, 0.8)',
+  onEnterKeyPress
 }) {
   const classes = useStyles();
   const { Portal } = usePortal();
@@ -53,6 +54,24 @@ export default function DeltaModal({
       }
     }
   }, [show]);
+
+  function onKeyDown(e) {
+    switch (e.keyCode) {
+      case 27:
+        onClose();
+        break;
+      case 13:
+        onEnterKeyPress();
+        break;
+      default:
+        break;
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   return (
     <Portal>
