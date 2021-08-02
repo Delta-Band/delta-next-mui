@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
   page: {
     minHeight: '100vh',
     width: '100%',
-    position: 'absolute'
+    position: 'absolute',
+    boxSizing: 'border-box',
+    padding: theme.spacing(2)
   }
 }));
 
@@ -32,27 +34,45 @@ const Template = (args) => {
   );
 };
 
-function items() {
-  const data = [
-    { text: 'aaa', color: 'red' },
-    { text: 'bbb', color: 'green' },
-    { text: 'ccc', color: 'blue' }
-  ];
-  return data.reduce((acc, item) => {
-    acc.push(
-      <div
-        style={{ backgroundColor: item.color, padding: 10, marginBottom: 20 }}
-      >
-        <Typography>{item.text}</Typography>
-      </div>
-    );
-    return acc;
-  }, []);
-}
+// function items() {
+//   const data = [
+//     { text: 'aaa', color: 'red', id: 10 },
+//     { text: 'bbb', color: 'green', id: 11 },
+//     { text: 'ccc', color: 'blue', id: 12 }
+//   ];
+//   return data.reduce((acc, item) => {
+//     acc.push(
+//       <div
+//       key={item.id}
+//         style={{ backgroundColor: item.color, padding: 10, marginBottom: 2 }}
+//       >
+//         <Typography>{item.text}</Typography>
+//       </div>
+//     );
+//     return acc;
+//   }, []);
+// }
 
 export const Default = Template.bind({});
 Default.args = {
-  items: items()
+  items: [
+    { text: 'aaa', color: 'red', id: 10 },
+    { text: 'bbb', color: 'green', id: 11 },
+    { text: 'ccc', color: 'blue', id: 12 },
+    { text: 'ddd', color: 'yellow', id: 13 }
+  ],
+  itemBuilder: (item) => (
+    <div
+      style={{
+        backgroundColor: item.color,
+        padding: 10,
+        // marginBottom: 2,
+        height: 100
+      }}
+    >
+      <Typography>{item.text}</Typography>
+    </div>
+  )
 };
 
 Default.parameters = {

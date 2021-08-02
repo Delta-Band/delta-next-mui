@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { motion, useMotionValue } from 'framer-motion';
+import { motion, useMotionValue, AnimateSharedLayout } from 'framer-motion';
 import move from 'array-move';
 import { clamp, distance } from '@popmotion/popcorn';
 
@@ -8,11 +8,18 @@ const useStyles = makeStyles((theme) => ({
   sortableRoot: {
     listStyle: 'none',
     padding: 0,
-    margin: 0
+    margin: 0,
+    position: 'relative'
+  },
+  sortableItem: {
+    borderRadius: '10px',
+    cursor: 'pointer',
+    width: '100%',
+    position: 'relative'
   }
 }));
 
-const buffer = 5;
+const buffer = 0;
 
 function findIndex(i, yOffset, positions) {
   let target = i;
@@ -20,22 +27,12 @@ function findIndex(i, yOffset, positions) {
   const bottom = top + height;
 
   // If moving down
-  if (yOffset > 0) {
-    const nextItem = positions[i + 1];
-    if (nextItem === undefined) return i;
-
-    const swapOffset =
-      distance(bottom, nextItem.top + nextItem.height / 2) + buffer;
-    if (yOffset > swapOffset) target = i + 1;
+  if (yOffset > bottom) {
+    target = i + 1;
 
     // If moving up
-  } else if (yOffset < 0) {
-    const prevItem = positions[i - 1];
-    if (prevItem === undefined) return i;
-
-    const prevBottom = prevItem.top + prevItem.height;
-    const swapOffset = distance(top, prevBottom - prevItem.height / 2) + buffer;
-    if (yOffset < -swapOffset) target = i - 1;
+  } else if (yOffset < top) {
+    target = i - 1;
   }
 
   return clamp(0, positions.length, target);
@@ -48,10 +45,10 @@ const flat = {
   transition: { delay: 0.3 }
 };
 
-function Item({ item, i, setPosition, moveItem }) {
+function Item({ item, i, setPosition, moveItem, itemBuilder }) {
   const ref = useRef(null);
   const [isDragging, setDragging] = useState(false);
-  const dragOriginY = useMotionValue(0);
+  const classes = useStyles();
 
   useEffect(() => {
     setPosition(i, {
@@ -63,40 +60,27 @@ function Item({ item, i, setPosition, moveItem }) {
   return (
     <motion.li
       ref={ref}
+      layout
       initial={false}
-      // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
+      className={classes.sortableItem}
       animate={isDragging ? onTop : flat}
-      // whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 1.12 }}
       drag='y'
-      dragOriginY={dragOriginY}
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={1}
       onDragStart={() => setDragging(true)}
       onDragEnd={() => setDragging(false)}
       onDrag={(e, { point }) => moveItem(i, point.y)}
-      positionTransition={({ delta }) => {
-        if (isDragging) {
-          // If we're dragging, we want to "undo" the items movement within the list
-          // by manipulating its dragOriginY. This will keep the item under the cursor,
-          // even though it's jumping around the DOM.
-          dragOriginY.set(dragOriginY.get() + delta.y);
-        }
-
-        // If `positionTransition` is a function and returns `false`, it's telling
-        // Motion not to animate from its old position into its new one. If we're
-        // dragging, we don't want any animation to occur.
-        return !isDragging;
-      }}
     >
-      {item}
+      {itemBuilder(item)}
     </motion.li>
   );
 }
 
-function Sortable({ items = [] }) {
+function Sortable({ items = [], itemBuilder }) {
   const classes = useStyles();
   const [_items, setItems] = useState(items);
+  const ref = useRef(null);
 
   const positions = useRef([]).current;
 
@@ -105,22 +89,28 @@ function Sortable({ items = [] }) {
   }
 
   function moveItem(i, dragOffset) {
-    const targetIndex = findIndex(i, dragOffset, positions);
-    if (targetIndex !== i) setItems(move(_items, i, targetIndex));
+    const listOffset = ref.current.offsetTop;
+    const targetIndex = findIndex(i, dragOffset - listOffset, positions);
+    if (targetIndex !== i) {
+      setItems(move(_items, i, targetIndex));
+    }
   }
 
   return (
-    <ul className={classes.sortableRoot}>
-      {_items.map((item, i) => (
-        <Item
-          key={i}
-          i={i}
-          item={item}
-          setPosition={setPosition}
-          moveItem={moveItem}
-        />
-      ))}
-    </ul>
+    <AnimateSharedLayout>
+      <motion.ul className={classes.sortableRoot} layout ref={ref}>
+        {_items.map((item, i) => (
+          <Item
+            key={item.id}
+            i={i}
+            item={item}
+            setPosition={setPosition}
+            moveItem={moveItem}
+            itemBuilder={itemBuilder}
+          />
+        ))}
+      </motion.ul>
+    </AnimateSharedLayout>
   );
 }
 
