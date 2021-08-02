@@ -72,7 +72,8 @@ Default.args = {
     >
       <Typography>{item.text}</Typography>
     </div>
-  )
+  ),
+  onChange: console.log
 };
 
 Default.parameters = {

@@ -45,7 +45,15 @@ const flat = {
   transition: { delay: 0.3 }
 };
 
-function Item({ item, i, setPosition, moveItem, itemBuilder }) {
+function Item({
+  item,
+  i,
+  setPosition,
+  moveItem,
+  itemBuilder,
+  order,
+  onChange
+}) {
   const ref = useRef(null);
   const [isDragging, setDragging] = useState(false);
   const classes = useStyles();
@@ -69,7 +77,10 @@ function Item({ item, i, setPosition, moveItem, itemBuilder }) {
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={1}
       onDragStart={() => setDragging(true)}
-      onDragEnd={() => setDragging(false)}
+      onDragEnd={() => {
+        setDragging(false);
+        onChange(order);
+      }}
       onDrag={(e, { point }) => moveItem(i, point.y)}
     >
       {itemBuilder(item)}
@@ -77,7 +88,7 @@ function Item({ item, i, setPosition, moveItem, itemBuilder }) {
   );
 }
 
-function Sortable({ items = [], itemBuilder }) {
+function Sortable({ items = [], itemBuilder, onChange }) {
   const classes = useStyles();
   const [_items, setItems] = useState(items);
   const ref = useRef(null);
@@ -107,6 +118,8 @@ function Sortable({ items = [], itemBuilder }) {
             setPosition={setPosition}
             moveItem={moveItem}
             itemBuilder={itemBuilder}
+            order={_items}
+            onChange={onChange}
           />
         ))}
       </motion.ul>
