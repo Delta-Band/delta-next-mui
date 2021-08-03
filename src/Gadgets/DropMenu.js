@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
   dropMenu: {
     position: 'absolute',
     top: '100%',
-    marginTop: 10
+    marginTop: 10,
+    zIndex: 1
   },
   triggerWrap: {
     cursor: 'pointer',
