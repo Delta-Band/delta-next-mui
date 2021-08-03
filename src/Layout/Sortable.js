@@ -42,10 +42,30 @@ function findIndex(i, yOffset, positions) {
 
 // Spring configs
 const onTop = { zIndex: 1 };
+
 const flat = {
   zIndex: 0,
   transition: { delay: 0.3 }
 };
+
+function getCoords(elem) {
+  // crossbrowser version
+  var box = elem.getBoundingClientRect();
+
+  var body = document.body;
+  var docEl = document.documentElement;
+
+  var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+  var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+  var clientTop = docEl.clientTop || body.clientTop || 0;
+  var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+  var top = box.top + scrollTop - clientTop;
+  var left = box.left + scrollLeft - clientLeft;
+
+  return { top: Math.round(top), left: Math.round(left) };
+}
 
 function Item({
   item,
@@ -62,9 +82,10 @@ function Item({
   const classes = useStyles();
 
   useEffect(() => {
+    const cords = getCoords(ref.current);
     setPosition(i, {
       height: ref.current.offsetHeight,
-      top: ref.current.offsetTop
+      top: cords.top
     });
   });
 
