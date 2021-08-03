@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     position: 'relative',
     border: '2px solid',
-    borderColor: 'transparent',
-    overflow: 'hidden'
+    borderColor: 'transparent'
   }
 }));
 
