@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { motion, useMotionValue, AnimateSharedLayout } from 'framer-motion';
 import move from 'array-move';
 import { clamp, distance } from '@popmotion/popcorn';
@@ -15,7 +15,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     cursor: 'pointer',
     width: '100%',
-    position: 'relative'
+    position: 'relative',
+    border: '2px solid',
+    borderColor: 'transparent',
+    overflow: 'hidden'
   }
 }));
 
@@ -55,6 +58,7 @@ function Item({
   onChange
 }) {
   const ref = useRef(null);
+  const theme = useTheme();
   const [isDragging, setDragging] = useState(false);
   const classes = useStyles();
 
@@ -72,7 +76,7 @@ function Item({
       initial={false}
       className={classes.sortableItem}
       animate={isDragging ? onTop : flat}
-      whileTap={{ scale: 1.12 }}
+      whileTap={{ borderColor: theme.palette.primary.main }}
       drag='y'
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={1}
