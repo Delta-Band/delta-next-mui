@@ -96,6 +96,10 @@ function Sortable({ items = [], itemBuilder, onChange }) {
   const [_items, setItems] = useState(items);
   const ref = useRef(null);
 
+  useEffect(() => {
+    setItems(items);
+  }, [items]);
+
   const positions = useRef([]).current;
 
   function setPosition(i, offset) {
