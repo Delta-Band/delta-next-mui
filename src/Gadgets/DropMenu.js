@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import usePortal from 'react-useportal';
 import disableScroll from 'disable-scroll';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import useClickOutside from 'use-click-outside';
 import cx from 'classnames';
 
@@ -13,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   mobileMenu: {
     position: 'fixed',
     top: 0,
+    left: 0,
     width: '100vw',
     height: '100%',
     background: 'rgba(0, 0, 0, 0.6)',
@@ -71,9 +73,7 @@ const bottomDrawer = {
     opacity: 1,
     transition: {
       type: 'spring',
-      // restSpeed: 0.5,
       mass: 0.5,
-      // stiffness: 50,
       damping: 15
     }
   },
@@ -82,9 +82,7 @@ const bottomDrawer = {
     opacity: 0,
     transition: {
       type: 'spring',
-      // restSpeed: 0.5,
       mass: 0.5,
-      // stiffness: 50,
       damping: 15
     }
   }
@@ -94,18 +92,15 @@ const dropMenu = {
   open: {
     opacity: 1,
     y: 0
-    // transition: {
-    //   type: 'spring',
-    //   bounce: 0.25
-    // }
   },
   close: {
     opacity: 0,
-    y: 40
-    // transition: {
-    //   type: 'spring',
-    //   bounce: 0
-    // }
+    y: 40,
+    transition: {
+      y: {
+        delay: 0.05
+      }
+    }
   }
 };
 
@@ -116,6 +111,7 @@ function DropMenu({ children, menu, location = 'bottomLeft' }) {
   const upIpad = useMediaQuery(theme.breakpoints.up('ipad'));
   const ref = useRef();
   useClickOutside(ref, closeMenu);
+  const { Portal } = usePortal();
 
   /** METHODS */
   function openMenu() {
@@ -141,39 +137,48 @@ function DropMenu({ children, menu, location = 'bottomLeft' }) {
         <div onClick={openMenu} className={classes.trigger}>
           {children}
         </div>
-        {upIpad && (
-          <motion.div
-            variants={dropMenu}
-            initial='close'
-            animate={open ? 'open' : 'close'}
-            className={cx(classes.dropMenu, classes[location])}
-            onClick={closeMenu}
-          >
-            {menu}
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {upIpad && open && (
+            <motion.div
+              key='menu'
+              variants={dropMenu}
+              initial='close'
+              animate='open'
+              exit='close'
+              className={cx(classes.dropMenu, classes[location])}
+              onClick={closeMenu}
+            >
+              {menu}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      {!upIpad && (
-        <motion.div
-          className={classes.mobileMenu}
-          variants={backDropMotion}
-          onClick={closeMenu}
-          initial='close'
-          animate={open ? 'open' : 'close'}
-          style={{
-            pointerEvents: open ? 'all' : 'none'
-          }}
-        >
-          <motion.div
-            variants={bottomDrawer}
-            className={classes.menu}
-            onClick={closeMenu}
-          >
-            {menu}
-          </motion.div>
-        </motion.div>
-      )}
+      <Portal>
+        <AnimatePresence>
+          {!upIpad && open && (
+            <motion.div
+              className={classes.mobileMenu}
+              variants={backDropMotion}
+              onClick={closeMenu}
+              initial='close'
+              animate='open'
+              exit='close'
+              style={{
+                pointerEvents: open ? 'all' : 'none'
+              }}
+            >
+              <motion.div
+                key='bottom-drawer'
+                variants={bottomDrawer}
+                className={classes.menu}
+                onClick={closeMenu}
+              >
+                {menu}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Portal>
     </div>
   );
 }
