@@ -41,11 +41,23 @@ const Template = (args) => {
           setItems([
             { text: 'aaa', color: 'red', id: 10 },
             { text: 'bbb', color: 'green', id: 11 },
-            { text: 'ccc', color: 'blue', id: 12 }
+            { text: 'ddd', color: 'yellow', id: 13 }
           ]);
         }}
       >
         Remove Item
+      </Button>
+      <Button
+        onClick={() => {
+          setItems([
+            { text: 'aaa', color: 'red', id: 10 },
+            { text: 'bbb', color: 'green', id: 11 },
+            { text: 'ccc', color: 'blue', id: 12 },
+            { text: 'ddd', color: 'yellow', id: 13 }
+          ]);
+        }}
+      >
+        Add Item
       </Button>
     </div>
   );

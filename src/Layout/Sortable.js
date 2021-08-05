@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { motion, useMotionValue, AnimateSharedLayout } from 'framer-motion';
+import { motion, AnimateSharedLayout, AnimatePresence } from 'framer-motion';
 import move from 'array-move';
-import { clamp, distance } from '@popmotion/popcorn';
+import { clamp } from '@popmotion/popcorn';
 
 const useStyles = makeStyles((theme) => ({
   sortableRoot: {
