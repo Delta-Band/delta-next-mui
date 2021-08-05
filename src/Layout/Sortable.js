@@ -140,7 +140,7 @@ function Sortable({ items = [], itemBuilder, onChange }) {
       <motion.ul className={classes.sortableRoot} layout ref={ref}>
         {_items.map((item, i) => (
           <Item
-            key={item.id}
+            key={item.id || `sortable-item-${i}`}
             i={i}
             item={item}
             setPosition={setPosition}
