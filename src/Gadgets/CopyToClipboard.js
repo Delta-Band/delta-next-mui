@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import usePortal from 'react-useportal';
-import { Link as LinkIcon } from '@styled-icons/evaicons-solid/Link';
+import { Clipboard as ClipboardIcon } from '@styled-icons/bootstrap/Clipboard';
 
 const useStyles = makeStyles((theme) => ({
   tip: {
@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1.5),
     paddingBottom: theme.spacing(1),
     borderRadius: theme.spacing(5),
-    zIndex: 12
+    zIndex: 12,
+    display: 'flex',
+    alignItems: 'center'
   },
   txt: {
     color: theme.palette.primary.contrastText,
@@ -27,18 +29,25 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   linkIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1.5),
+    color: theme.palette.primary.contrastText
   }
 }));
 
-function CopyURL({ children, classNames = {}, url, autoHide = true }) {
+function CopyToClipboard({
+  children,
+  classNames = {},
+  string,
+  autoHide = false,
+  confirmationText = 'COPIED'
+}) {
   const classes = useStyles();
   const { Portal } = usePortal();
   const [showTip, setShowTip] = useState(false);
   const timeOut = useRef();
 
   function handleClick() {
-    navigator.clipboard.writeText(url);
+    navigator.clipboard.writeText(string);
     setShowTip(true);
     clearTimeout(timeOut.current);
     if (autoHide) {
@@ -72,8 +81,19 @@ function CopyURL({ children, classNames = {}, url, autoHide = true }) {
               className={cx(classes.tip, classNames.tipBox)}
               onClick={() => setShowTip(false)}
             >
+              <motion.div
+                className={classes.linkIcon}
+                initial={{ y: -1, scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                transition={{
+                  delay: 0.15
+                }}
+              >
+                <ClipboardIcon size={24} />
+              </motion.div>
               <Typography className={cx(classes.txt, classNames.tipTxt)}>
-                <LinkIcon size={24} className={classes.linkIcon} /> LINK COPIED
+                {confirmationText}
               </Typography>
             </motion.div>
           )}
@@ -83,4 +103,4 @@ function CopyURL({ children, classNames = {}, url, autoHide = true }) {
   );
 }
 
-export default CopyURL;
+export default CopyToClipboard;

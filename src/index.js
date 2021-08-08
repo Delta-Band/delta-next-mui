@@ -1,5 +1,5 @@
 export { default as ScrollDownTip } from './Gadgets/scroll-down-tip/ScrollDownTip';
-export { default as CopyURL } from './Gadgets/CopyURL';
+export { default as CopyToClipboard } from './Gadgets/CopyToClipboard';
 export { default as DropMenu } from './Gadgets/DropMenu';
 export { default as Modal } from './Gadgets/Modal';
 export { default as Accordion } from './Layout/Accordion';
