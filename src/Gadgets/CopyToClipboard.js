@@ -38,7 +38,7 @@ function CopyToClipboard({
   children,
   classNames = {},
   string,
-  autoHide = false,
+  autoHide = true,
   confirmationText = 'COPIED'
 }) {
   const classes = useStyles();
