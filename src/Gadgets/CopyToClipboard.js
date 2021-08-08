@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.primary.main,
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
-    paddingTop: theme.spacing(1.5),
-    paddingBottom: theme.spacing(1),
+    paddingTop: 10,
+    paddingBottom: 9,
     borderRadius: theme.spacing(5),
     zIndex: 12,
     display: 'flex',
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
   txt: {
     color: theme.palette.primary.contrastText,
-    fontSize: 12,
+    fontSize: 13,
     display: 'inline-flex',
     alignItems: 'center'
   },
