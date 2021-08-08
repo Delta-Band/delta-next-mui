@@ -85,12 +85,12 @@ function CopyToClipboard({
                 className={classes.icon}
                 initial={{ y: -2, scale: 0 }}
                 animate={{ scale: 1 }}
-                exit={{ scale: 0, y: -1 }}
+                exit={{ scale: 0 }}
                 transition={{
                   delay: 0.15
                 }}
               >
-                <ClipboardIcon size={24} />
+                <ClipboardIcon size={24} className={classNames.icon} />
               </motion.div>
               <Typography className={cx(classes.txt, classNames.tipTxt)}>
                 {confirmationText}
