@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
     paddingTop: 10,
-    paddingBottom: 9,
+    paddingBottom: 10,
     borderRadius: theme.spacing(5),
     zIndex: 12,
     display: 'flex',
@@ -24,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
   },
   txt: {
     color: theme.palette.primary.contrastText,
-    fontSize: 13,
+    fontSize: 14,
     display: 'inline-flex',
     alignItems: 'center'
   },
-  linkIcon: {
+  icon: {
     marginRight: theme.spacing(1.5),
     color: theme.palette.primary.contrastText
   }
@@ -82,10 +82,10 @@ function CopyToClipboard({
               onClick={() => setShowTip(false)}
             >
               <motion.div
-                className={classes.linkIcon}
-                initial={{ y: -1, scale: 0 }}
+                className={classes.icon}
+                initial={{ y: -2, scale: 0 }}
                 animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
+                exit={{ scale: 0, y: -1 }}
                 transition={{
                   delay: 0.15
                 }}
