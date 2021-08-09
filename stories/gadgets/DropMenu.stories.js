@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
@@ -14,6 +14,10 @@ export default {
 };
 
 const useStyles = makeStyles((theme) => ({
+  page: {
+    height: '100vh',
+    width: '100vvw'
+  },
   menuInner: {
     background: '#FFF',
     borderTopLeftRadius: theme.spacing(2),
@@ -45,13 +49,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Template = (args) => {
-  const [item, selectItem] = useState('item 1');
   const classes = useStyles();
+  const [item, selectItem] = useState('item 1');
+  const [forceMenu, setForceMenu] = useState(null);
+
+  useEffect(() => {
+    if (forceMenu !== null) {
+      setForceMenu(null);
+    }
+  }, [forceMenu]);
 
   return (
-    <div style={{ height: '100%', padding: 40 }}>
+    <div
+      className={classes.page}
+      onClick={() => {
+        setForceMenu('close');
+      }}
+    >
       <DropMenu
         {...args}
+        force={forceMenu}
         menu={
           <div className={classes.menuInner}>
             {['item 1', 'item 2', 'item 3'].map((_item) => (

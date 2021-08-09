@@ -116,7 +116,7 @@ function DropMenu({
   const theme = useTheme();
   const upIpad = useMediaQuery(theme.breakpoints.up('ipad'));
   const ref = useRef();
-  useClickOutside(ref, closeMenu);
+  // useClickOutside(ref, closeMenu);
   const { Portal } = usePortal();
 
   /** METHODS */
