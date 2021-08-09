@@ -108,11 +108,11 @@ function DropMenu({
   children,
   menu,
   location = 'bottomLeft',
-  force = false,
+  force = null,
   onToggle = () => {}
 }) {
   const classes = useStyles();
-  const [open, setOpen] = useState(force);
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
   const upIpad = useMediaQuery(theme.breakpoints.up('ipad'));
   const ref = useRef();
@@ -147,9 +147,9 @@ function DropMenu({
   }, [open]);
 
   useEffect(() => {
-    if (force) {
+    if (force === 'open') {
       openMenu();
-    } else {
+    } else if (force === 'close') {
       closeMenu();
     }
   }, [force]);
