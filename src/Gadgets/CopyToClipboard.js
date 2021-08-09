@@ -46,7 +46,8 @@ function CopyToClipboard({
   const [showTip, setShowTip] = useState(false);
   const timeOut = useRef();
 
-  function handleClick() {
+  function handleClick(e) {
+    e.stopPropagation();
     navigator.clipboard.writeText(string);
     setShowTip(true);
     clearTimeout(timeOut.current);
