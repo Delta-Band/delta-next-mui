@@ -155,7 +155,11 @@ function DropMenu({
   }, [force]);
 
   return (
-    <div className={classes.root} ref={ref}>
+    <div
+      className={classes.root}
+      ref={ref}
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className={classes.triggerWrap}>
         <div onClick={toggleMenu} className={classes.trigger}>
           {children}
