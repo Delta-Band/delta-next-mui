@@ -104,9 +104,15 @@ const dropMenu = {
   }
 };
 
-function DropMenu({ children, menu, location = 'bottomLeft' }) {
+function DropMenu({
+  children,
+  menu,
+  location = 'bottomLeft',
+  force = false,
+  onToggle = () => {}
+}) {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(force);
   const theme = useTheme();
   const upIpad = useMediaQuery(theme.breakpoints.up('ipad'));
   const ref = useRef();
@@ -122,6 +128,14 @@ function DropMenu({ children, menu, location = 'bottomLeft' }) {
     setOpen(false);
   }
 
+  function toggleMenu() {
+    if (open) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
   /** EFFECTS */
   useEffect(() => {
     if (open) {
@@ -129,12 +143,21 @@ function DropMenu({ children, menu, location = 'bottomLeft' }) {
     } else {
       disableScroll.off();
     }
+    onToggle(open);
   }, [open]);
+
+  useEffect(() => {
+    if (force) {
+      openMenu();
+    } else {
+      closeMenu();
+    }
+  }, [force]);
 
   return (
     <div className={classes.root} ref={ref}>
       <div className={classes.triggerWrap}>
-        <div onClick={openMenu} className={classes.trigger}>
+        <div onClick={toggleMenu} className={classes.trigger}>
           {children}
         </div>
         <AnimatePresence>
