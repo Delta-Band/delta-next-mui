@@ -7,6 +7,9 @@ import usePortal from 'react-useportal';
 import { Clipboard as ClipboardIcon } from '@styled-icons/bootstrap/Clipboard';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex'
+  },
   tip: {
     position: 'fixed',
     bottom: 0,
@@ -60,7 +63,7 @@ function CopyToClipboard({
 
   return (
     <Fragment>
-      <div className={classes.root} onClick={handleClick}>
+      <div className={cx(classes.root, classNames.root)} onClick={handleClick}>
         {children}
       </div>
       <Portal>
