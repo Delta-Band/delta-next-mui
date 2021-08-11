@@ -39,8 +39,14 @@ const Template = (args) => {
   const [isOpen, setIsOpen] = useState(false);
   const classes = useStyles();
 
+  const array = [];
+
+  for (let i = 0; i < 40; i++) {
+    array.push(i);
+  }
+
   return (
-    <div style={{ height: '100%', padding: 40 }}>
+    <div style={{ height: '100vh', padding: 40, boxSizing: 'border-box' }}>
       <Button
         variant='contained'
         onClick={() => {
@@ -49,10 +55,14 @@ const Template = (args) => {
       >
         Open Modal
       </Button>
+      {array.map((i) => (
+        <Typography>Content {i}</Typography>
+      ))}
       <Modal
         show={isOpen}
         className={classes.modal}
         onClose={() => setIsOpen(false)}
+        // element={ref.current}
       >
         <Typography>I am a Modal</Typography>
       </Modal>

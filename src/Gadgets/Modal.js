@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import usePortal from 'react-useportal';
 import screenfull from 'screenfull';
 import { makeStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import cx from 'classnames';
-import disableScroll from 'disable-scroll';
+import { default as _disableScroll } from 'disable-scroll';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +34,8 @@ export default function DeltaModal({
   className,
   fullScreen = false,
   backDropColor = 'rgba(0, 0, 0, 0.8)',
-  onEnterKeyPress
+  onEnterKeyPress,
+  disableScroll = true
 }) {
   const classes = useStyles();
   const { Portal } = usePortal();
@@ -46,9 +46,13 @@ export default function DeltaModal({
       if (fullScreen && screenfull.isEnabled) {
         screenfull.request(ref.current);
       }
-      disableScroll.on();
+      if (disableScroll) {
+        _disableScroll.on();
+      }
     } else {
-      disableScroll.off();
+      if (disableScroll) {
+        _disableScroll.off();
+      }
       if (fullScreen && screenfull.isEnabled) {
         screenfull.exit();
       }
