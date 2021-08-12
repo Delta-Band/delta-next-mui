@@ -62,7 +62,7 @@ const Template = (args) => {
         show={isOpen}
         className={classes.modal}
         onClose={() => setIsOpen(false)}
-        // element={ref.current}
+        disableScroll={false}
       >
         <Typography>I am a Modal</Typography>
       </Modal>
