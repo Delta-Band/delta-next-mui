@@ -60,6 +60,7 @@ export default function DeltaModal({
   }, [show]);
 
   function onKeyDown(e) {
+    if (!show) return;
     switch (e.keyCode) {
       case 27:
         onClose();
