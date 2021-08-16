@@ -58,11 +58,11 @@ export default function DeltaModal({
         screenfull.exit();
       }
     }
-    isOpen.curret = show;
+    isOpen.current = show;
   }, [show]);
 
   function onKeyDown(e) {
-    if (!isOpen.curret) return;
+    if (!isOpen.current) return;
     switch (e.keyCode) {
       case 27:
         onClose();
