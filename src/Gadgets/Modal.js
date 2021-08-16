@@ -40,6 +40,7 @@ export default function DeltaModal({
   const classes = useStyles();
   const { Portal } = usePortal();
   const ref = useRef();
+  const isOpen = useRef();
 
   useEffect(() => {
     if (show) {
@@ -57,10 +58,11 @@ export default function DeltaModal({
         screenfull.exit();
       }
     }
+    isOpen.curret = show;
   }, [show]);
 
   function onKeyDown(e) {
-    if (!show) return;
+    if (!isOpen.curret) return;
     switch (e.keyCode) {
       case 27:
         onClose();
