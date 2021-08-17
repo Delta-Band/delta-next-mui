@@ -35,11 +35,15 @@ const useStyles = makeStyles((theme) => ({
   },
   carouselControls: {
     display: 'flex',
-    justifyContent: 'flex-end',
-    opacity: 0
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   btn: {
     cursor: 'pointer'
+  },
+  row: {
+    display: 'flex',
+    alignItems: 'center'
   }
 }));
 
@@ -47,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 const MOTION_VARIANTS = {
   btn: {
     enable: {
-      opacity: 1,
+      opacity: 0.5,
       scale: 1
     },
     disable: {
@@ -82,6 +86,83 @@ function CarouselItem({ children, itemWidth, spacing }) {
   );
 }
 
+function Controlls({
+  onSwipedRight,
+  index,
+  controlsColor,
+  leftControll,
+  onSwipedLeft,
+  reachedTheEnd,
+  childrenLength,
+  rightControll,
+  visItems,
+  moreControlls
+}) {
+  const classes = useStyles();
+
+  return (
+    <motion.div
+      className={cx(classes.carouselControls)}
+      animate={{
+        opacity: 1
+      }}
+      transition={{
+        delay: 1
+      }}
+    >
+      <div className={classes.row}>{moreControlls}</div>
+      <div className={classes.row}>
+        <motion.div
+          variants={MOTION_VARIANTS.btn}
+          className={classes.btn}
+          onClick={onSwipedRight}
+          initial='disable'
+          whileHover={{
+            opacity: 1
+          }}
+          animate={index === 0 ? 'disable' : 'enable'}
+          style={{
+            transformOrigin: 'center center',
+            pointerEvents: index === 0 ? 'none' : 'all',
+            color: controlsColor
+          }}
+        >
+          {leftControll || (
+            <IconButton color='secondary' size='medium'>
+              <ChevronLeft size={32} />
+            </IconButton>
+          )}
+        </motion.div>
+        <motion.div
+          variants={MOTION_VARIANTS.btn}
+          className={classes.btn}
+          onClick={onSwipedLeft}
+          initial='disable'
+          initial={{
+            opacity: 0.5
+          }}
+          whileHover={{
+            opacity: 1
+          }}
+          animate={reachedTheEnd.current ? 'disable' : 'enable'}
+          style={{
+            transformOrigin: 'center center',
+            pointerEvents:
+              index >= childrenLength - visItems.current ? 'none' : 'all',
+            color: controlsColor
+          }}
+        >
+          {rightControll || (
+            <IconButton color='secondary' size='medium'>
+              <ChevronRight size={32} />
+            </IconButton>
+          )}
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Carousel({
   children,
   className,
@@ -93,15 +174,18 @@ export default function Carousel({
   forceIndex = 0,
   gaCategory,
   forceControls = false,
+  controllsOnTop = false,
   onItemWidthChange = () => {},
-  controsColor,
+  controlsColor,
+  speed = 0.5,
+  moreControlls,
+  sliderClassName,
   onChange = () => {}
 }) {
   const classes = useStyles();
   const myRef = useRef();
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up('md'));
-  const upSm = useMediaQuery(theme.breakpoints.up('sm'));
   const [index, setIndex] = useState(forceIndex);
   const [itemWidth, setItemWidth] = useState(0);
   const [xPos, setXPos] = useState(0);
@@ -141,14 +225,14 @@ export default function Carousel({
     if (!myRef.current) return;
     const containerRect = myRef.current.getBoundingClientRect();
     setContainerWidth(containerRect.width);
-    // if (debug) {
-    //   console.log('containerRect.width: ', containerRect.width);
-    //   console.log('visibleItems: ', visibleItems);
-    //   console.log(
-    //     'itemWidth: ',
-    //     Math.floor(containerRect.width / visibleItems)
-    //   );
-    // }
+    if (debug) {
+      console.log('containerRect.width: ', containerRect.width);
+      console.log('visibleItems: ', visibleItems);
+      console.log(
+        'itemWidth: ',
+        Math.floor(containerRect.width / visibleItems)
+      );
+    }
     // setItemWidth(Math.floor(containerRect.width / visibleItems));
   }
 
@@ -227,7 +311,7 @@ export default function Carousel({
     timeout2.current = setTimeout(init, 1000);
     visItems.current = visibleItems;
     return () => {
-      clearTimeout(timeout.current2);
+      clearTimeout(timeout2.current);
     };
   }, [visibleItems]);
 
@@ -237,13 +321,27 @@ export default function Carousel({
 
   return (
     <div className={cx(classes.root, className)} ref={myRef}>
+      {controllsOnTop && (upMd || forceControls) && (
+        <Controlls
+          onSwipedRight={onSwipedRight}
+          index={index}
+          controlsColor={controlsColor}
+          leftControll={leftControll}
+          onSwipedLeft={onSwipedLeft}
+          reachedTheEnd={reachedTheEnd}
+          childrenLength={children.length}
+          rightControll={rightControll}
+          visItems={visItems}
+          moreControlls={moreControlls}
+        />
+      )}
       <motion.div
-        className={classes.slider}
+        className={cx(classes.slider, sliderClassName)}
         animate={{ x: xPos }}
         transition={{
           type: 'spring',
           bounce: 0.2,
-          duration: 0.5 * visItems.current
+          duration: speed * visItems.current
         }}
       >
         {children.map((child, i) => (
@@ -252,64 +350,18 @@ export default function Carousel({
           </CarouselItem>
         ))}
       </motion.div>
-      {(upMd || forceControls) && (
-        <motion.div
-          className={cx(classes.carouselControls)}
-          animate={{
-            opacity: 1
-          }}
-          transition={{
-            delay: 1
-          }}
-        >
-          <div>
-            <motion.div
-              variants={MOTION_VARIANTS.btn}
-              className={classes.btn}
-              onClick={onSwipedRight}
-              initial='disable'
-              whileHover={{
-                opacity: 1
-              }}
-              animate={index === 0 ? 'disable' : 'enable'}
-              style={{
-                transformOrigin: 'center center',
-                pointerEvents: index === 0 ? 'none' : 'all',
-                color: controsColor
-              }}
-            >
-              {leftControll || (
-                <IconButton color='secondary' size='medium'>
-                  <ChevronLeft size={32} />
-                </IconButton>
-              )}
-            </motion.div>
-          </div>
-          <div>
-            <motion.div
-              variants={MOTION_VARIANTS.btn}
-              className={classes.btn}
-              onClick={onSwipedLeft}
-              initial='disable'
-              whileHover={{
-                opacity: 1
-              }}
-              animate={reachedTheEnd.current ? 'disable' : 'enable'}
-              style={{
-                transformOrigin: 'center center',
-                pointerEvents:
-                  index >= children.length - visItems.current ? 'none' : 'all',
-                color: controsColor
-              }}
-            >
-              {rightControll || (
-                <IconButton color='secondary' size='medium'>
-                  <ChevronRight size={32} />
-                </IconButton>
-              )}
-            </motion.div>
-          </div>
-        </motion.div>
+      {!controllsOnTop && (upMd || forceControls) && (
+        <Controlls
+          onSwipedRight={onSwipedRight}
+          index={index}
+          controlsColor={controlsColor}
+          leftControll={leftControll}
+          onSwipedLeft={onSwipedLeft}
+          reachedTheEnd={reachedTheEnd}
+          childrenLength={children.length}
+          rightControll={rightControll}
+          visItems={visItems}
+        />
       )}
     </div>
   );

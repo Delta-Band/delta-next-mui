@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Footer, GA } from '../../src';
 import logo from './footer_logo.svg';
 
-GA.init('UA-177908744-1', undefined, { devMode: true });
+// GA.init('UA-177908744-1', undefined, { devMode: true });
 
 // console.log('INITIAL_VIEWPORTS:, ', INITIAL_VIEWPORTS);
 

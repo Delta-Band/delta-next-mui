@@ -14,49 +14,44 @@ import GA from '../GA';
 const useStyles = makeStyles((theme) => ({
   presentationRoot: {
     width: '100%',
-    position: 'relative'
+    height: '100%',
+    position: 'fixed',
+    background: '#000',
+    top: 0,
+    left: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  carousel: {
+    maxHeight: '100%'
+  },
+  slider: {
+    maxHeight: 'calc(100% - 56px)'
   },
   slide: {
-    border: '1px solid',
-    borderColor: theme.palette.text.primary.main,
     boxSizing: 'border-box',
-    borderRadius: theme.spacing(1),
     overflow: 'hidden',
     background: 'white',
     width: '100%',
     maxHeight: '100%',
-    objectFit: 'cover'
+    objectFit: 'fit'
   },
-  fullScreenBtn: {
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    '&:hover': {
-      '& $icon': {
-        opacity: 1,
-        transitionDuration: '.2s'
-      }
-    }
-  },
-  btnsWrapper: {
+  menuRoot: {
+    display: 'flex',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     position: 'absolute',
-    bottom: theme.spacing(1),
-    opacity: 0,
-    display: 'inline-flex'
+    zIndex: 1,
+    paddingRight: theme.spacing(25),
+    boxSizing: 'border-box',
+    pointerEvents: 'none'
   },
   btnTxt: {
     fontSize: 15,
     marginRight: theme.spacing(1)
-  },
-  icon: {
-    marginTop: -1,
-    transition: '1s ease-in-out',
-    transformOrigin: 'center left',
-    [theme.breakpoints.up('sm')]: {
-      opacity: 0.3
-    }
-  },
-  iconButton: {
-    marginTop: 8
   },
   gallery: {
     width: '80%',
@@ -70,8 +65,21 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xl')]: {
       width: '90%'
     }
+  },
+  textColor: {
+    color: '#FFF'
   }
 }));
+
+function SlideMenu() {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.menuRoot}>
+      <Typography className={classes.textColor}>Slide Menu</Typography>
+    </div>
+  );
+}
 
 function Tools({ setFullScreen, onRestart, isFullScreen }) {
   // HOOKS
@@ -81,7 +89,7 @@ function Tools({ setFullScreen, onRestart, isFullScreen }) {
 
   return (
     <motion.div
-      className={classes.btnsWrapper}
+      className={classes.toolsRoot}
       animate={{
         opacity: 1
       }}
@@ -89,73 +97,69 @@ function Tools({ setFullScreen, onRestart, isFullScreen }) {
         delay: 1
       }}
     >
-      {upSm ? (
-        <Button
-          className={cx(classes.fullScreenBtn)}
-          size='small'
+      <SlideMenu />
+      {/* <div>
+        <IconButton
           color='secondary'
           onClick={() => {
             setFullScreen(!isFullScreen);
           }}
         >
-          <Typography
-            className={classes.btnTxt}
-            style={{
-              color: isFullScreen ? '#FFF' : theme.palette.text.primary.main
-            }}
-          >
-            {isFullScreen ? 'Exit' : 'Full Screen'}
-          </Typography>
-          {isFullScreen ? (
-            <ExitIcon size={24} className={classes.icon} />
-          ) : (
-            <ExpandIcon size={24} className={classes.icon} />
-          )}
-        </Button>
-      ) : (
-        <IconButton
-          className={cx(classes.iconButton)}
-          color='secondary'
-          size='medium'
-          onClick={() => {
-            setFullScreen(!isFullScreen);
-          }}
-        >
-          {isFullScreen ? (
-            <ExitIcon size={24} className={classes.icon} />
-          ) : (
-            <ExpandIcon size={24} className={classes.icon} />
-          )}
+          {isFullScreen ? <ExitIcon size={32} /> : <ExpandIcon size={32} />}
         </IconButton>
-      )}
-      {upSm ? (
-        <Button
-          size='small'
-          color='secondary'
-          className={cx(classes.fullScreenBtn)}
-          onClick={onRestart}
-        >
-          <Typography
-            className={classes.btnTxt}
-            style={{
-              color: isFullScreen ? '#FFF' : theme.palette.text.primary.main
-            }}
-          >
-            Restart
-          </Typography>
-          <RestartIcon size={24} className={classes.icon} />
-        </Button>
-      ) : (
-        <IconButton
-          color='secondary'
-          onClick={onRestart}
-          size='medium'
-          className={cx(classes.iconButton)}
-        >
-          <RestartIcon size={24} className={classes.icon} />
+        <IconButton color='secondary' onClick={onRestart}>
+          <RestartIcon size={26} />
         </IconButton>
-      )}
+      </div> */}
     </motion.div>
+  );
+}
+
+function SlideManager({
+  slides,
+  index,
+  setIndex,
+  setFullScreen,
+  gaCategory,
+  fullScreen
+}) {
+  const classes = useStyles();
+
+  return (
+    <>
+      {/* <Tools
+        setFullScreen={setFullScreen}
+        isFullScreen={fullScreen}
+        onRestart={() => {
+          setIndex(0);
+          if (gaCategory) {
+            GA.event(gaCategory, 'Used Restart button');
+          }
+        }}
+      /> */}
+      <Carousel
+        visibleItems={1}
+        forceControls
+        controllsOnTop
+        forceIndex={index}
+        onChange={setIndex}
+        spacing={0}
+        className={classes.carousel}
+        // speed={0}
+        moreControlls={<SlideMenu />}
+        sliderClassName={classes.slider}
+        objectFit='fit'
+      >
+        {slides.map((slide, i) => (
+          <img
+            src={slide.image}
+            key={i}
+            className={classes.slide}
+            draggable='false'
+          />
+        ))}
+      </Carousel>
+    </>
   );
 }
 
@@ -209,33 +213,15 @@ function Presentation({ slides, gaCategory }) {
   return (
     <>
       <div className={classes.presentationRoot}>
-        <Carousel
-          visibleItems={1.1}
-          forceControls
-          forceIndex={index}
-          onChange={setIndex}
-        >
-          {slides.map((slide, i) => (
-            <img
-              src={slide}
-              key={i}
-              className={classes.slide}
-              draggable='false'
-            />
-          ))}
-        </Carousel>
-        <Tools
+        <SlideManager
+          slides={slides}
+          index={index}
+          setIndex={setIndex}
           setFullScreen={setFullScreen}
-          isFullScreen={false}
-          onRestart={() => {
-            setIndex(0);
-            if (gaCategory) {
-              GA.event(gaCategory, 'Used Restart button');
-            }
-          }}
+          gaCategory={gaCategory}
         />
       </div>
-      <Modal
+      {/* <Modal
         show={fullScreen}
         backdropOpacity={1}
         fullScreen
@@ -243,34 +229,15 @@ function Presentation({ slides, gaCategory }) {
           modal: classes.gallery
         }}
       >
-        <Carousel
-          visibleItems={1}
-          forceControls
-          forceIndex={index}
-          spacing={0}
-          controsColor={theme.palette.secondary.main}
-          onChange={setIndex}
-        >
-          {slides.map((slide, i) => (
-            <img
-              src={slide}
-              key={`${i}-fullscreen`}
-              className={classes.slide}
-              draggable='false'
-            />
-          ))}
-        </Carousel>
-        <Tools
+        <SlideManager
+          slides={slides}
+          index={index}
+          setIndex={setIndex}
           setFullScreen={setFullScreen}
-          isFullScreen={true}
-          onRestart={() => {
-            setIndex(0);
-            if (gaCategory) {
-              GA.event(gaCategory, 'Used Restart button');
-            }
-          }}
+          gaCategory={gaCategory}
+          fullScreen
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 }
