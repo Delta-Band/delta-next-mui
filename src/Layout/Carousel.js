@@ -271,6 +271,8 @@ export default function Carousel({
     }
   }
 
+  const debounceSetXPos = debounce(setXPos, 250, { leading: false });
+
   /** EFFECTS */
 
   useEffect(() => {
@@ -281,7 +283,7 @@ export default function Carousel({
     if (debug) {
       console.log('itemWidth: ', itemWidth);
     }
-    setXPos(
+    debounceSetXPos(
       -index * itemWidth +
         (index === 0 ? 0 : (itemWidth * (visibleItems - 1)) / 2 + spacing / 2)
     );

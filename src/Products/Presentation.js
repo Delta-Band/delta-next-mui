@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { Next as NextIcon } from '@styled-icons/fluentui-system-regular/Next';
 import { Previous as PreviousIcon } from '@styled-icons/fluentui-system-regular/Previous';
 import { DividerShort as DividerIcon } from '@styled-icons/fluentui-system-regular/DividerShort';
+import debounce from 'lodash/debounce';
 import Carousel from '../Layout/Carousel';
 import GA from '../GA';
 
@@ -41,17 +42,14 @@ const useStyles = makeStyles((theme) => ({
     height: '100%'
   },
   slider: {
-    maxHeight: '100%',
-    [theme.breakpoints.up('laptop')]: {
-      height: '100%'
-    }
+    height: '100%'
   },
   slide: {
     boxSizing: 'border-box',
     overflow: 'hidden',
     background: 'white',
     width: '100%',
-    maxHeight: '100%',
+    height: '100%',
     objectFit: 'fill',
     [theme.breakpoints.up('laptop')]: {
       height: '100%'
@@ -149,7 +147,10 @@ function SlideMenu({ setIndex, index, slides, classNames }) {
       (child) => child.type === 'button'
     );
     const offsetLeft = buttons[index].offsetLeft;
-    slidMenuRef.current.scroll({ left: offsetLeft - 50, behavior: 'smooth' });
+    slidMenuRef.current.scroll({
+      left: offsetLeft - Math.max(window.innerWidth * 0.01, 100),
+      behavior: 'smooth'
+    });
   }, [index]);
 
   return (
@@ -195,6 +196,9 @@ function Controllers({ index, setIndex, slidesCount }) {
           opacity: 0
         }}
         whileHover={{
+          opacity: index > 0 ? 1 : 0
+        }}
+        whileTap={{
           opacity: index > 0 ? 1 : 0
         }}
         onClick={() => {
@@ -250,8 +254,25 @@ function Presentation({
     }
   }
 
+  function onKeyDown(e) {
+    switch (e.keyCode) {
+      case 39:
+        setIndex((prevIndex) => Math.min(prevIndex + 1, slides.length - 1));
+        break;
+      case 37:
+        setIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        break;
+      default:
+        break;
+    }
+  }
+
   useEffect(() => {
     preloadImages();
+    window.addEventListener('keydown', onKeyDown);
+    return function () {
+      return window.removeEventListener('keydown', onKeyDown);
+    };
   }, []);
 
   useEffect(() => {

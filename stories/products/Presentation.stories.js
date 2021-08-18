@@ -69,7 +69,7 @@ Default.args = {
     {
       label: 'Slide 4',
       image:
-        'https://firebasestorage.googleapis.com/v0/b/reactor-dam.appspot.com/o/OHUMR4479PfGVcQoGe3uKrrLg233%2FnPXQ53aB0TDCwQq7lL6x%2Fslide.gif?alt=media&token=1ab4645f-bd0f-4d09-a7eb-053b63c00ca6'
+        'https://firebasestorage.googleapis.com/v0/b/reactor-dam.appspot.com/o/OHUMR4479PfGVcQoGe3uKrrLg233%2FnPXQ53aB0TDCwQq7lL6x%2Fslide.gif?alt=media&token=1402fd97-3199-4b43-a2b2-b230b8c8d865'
     },
     {
       label: 'Slide 5',
