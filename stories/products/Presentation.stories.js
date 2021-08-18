@@ -3,7 +3,7 @@ import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Presentation } from '../../src';
 
-// console.log('INITIAL_VIEWPORTS:, ', INITIAL_VIEWPORTS);
+// GA.init('UA-177908744-1', undefined, { devMode: true });
 
 export default {
   title: 'Products/Presentation',

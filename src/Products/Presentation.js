@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { motion } from 'framer-motion';
@@ -156,13 +156,11 @@ function SlideMenu({ setIndex, index, slides, classNames }) {
   return (
     <div className={classes.menuRoot} ref={slidMenuRef}>
       {slides.map((slide, i) => (
-        <>
+        <Fragment key={i}>
           <Button
-            key={i}
             className={cx(classes.menuItem, classNames.menuBtn, {
               [classes.active]: index === i
             })}
-            key={i}
             size='small'
             onClick={() => {
               setIndex(i);
@@ -173,11 +171,10 @@ function SlideMenu({ setIndex, index, slides, classNames }) {
           {i < slides.length - 1 && (
             <DividerIcon
               size={26}
-              color
               className={cx(classes.divider, classNames.menuBtn)}
             />
           )}
-        </>
+        </Fragment>
       ))}
     </div>
   );
@@ -244,6 +241,7 @@ function Presentation({
 }) {
   const classes = useStyles();
   const [index, setIndex] = useState(0);
+  const trackedIndex = useRef(0);
   const slideViewStartTime = useRef(new Date().getTime());
 
   function preloadImages() {
@@ -278,10 +276,14 @@ function Presentation({
   useEffect(() => {
     const timestamp = new Date().getTime();
     const timeSpent = (timestamp - slideViewStartTime.current) / 1000;
-    if (timeSpent >= 1.5 && gaCategory) {
-      GA.event(gaCategory, `time spent on slide ${index}`, timeSpent);
+    if (trackedIndex.current !== index) {
+      const slideName = slides[trackedIndex.current].label;
+      if (timeSpent >= 1.5 && gaCategory) {
+        GA.event(gaCategory, `Time spent on slide ${slideName}`, timeSpent);
+      }
+      slideViewStartTime.current = timestamp;
+      trackedIndex.current = index;
     }
-    slideViewStartTime.current = timestamp;
   }, [index]);
 
   return (
