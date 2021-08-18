@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { Button, Typography, IconButton } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
 import { motion } from 'framer-motion';
-import { Fullscreen as ExpandIcon } from '@styled-icons/remix-line/Fullscreen';
 import cx from 'classnames';
-import { FullscreenExit as ExitIcon } from '@styled-icons/remix-fill/FullscreenExit';
+import { Next as NextIcon } from '@styled-icons/fluentui-system-regular/Next';
+import { Previous as PreviousIcon } from '@styled-icons/fluentui-system-regular/Previous';
 import { DividerShort as DividerIcon } from '@styled-icons/fluentui-system-regular/DividerShort';
 import Carousel from '../Layout/Carousel';
-import Modal from '../Gadgets/Modal';
 import GA from '../GA';
-import DropMenu from '../Gadgets/DropMenu';
 
 const useStyles = makeStyles((theme) => ({
   presentationRoot: {
@@ -91,7 +88,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   active: {
-    // color: theme.palette.secondary.main,
     '& .MuiButton-label': {
       color: `${theme.palette.secondary.main} !important`
     }
@@ -102,6 +98,44 @@ const useStyles = makeStyles((theme) => ({
     mrginRight: 2,
     opacity: 0.3,
     transform: 'translateY(-1px)'
+  },
+  controlers: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  controlerHotZone: {
+    height: '100%',
+    width: '33%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    background: 'rgba(255, 255, 255, 0.5)',
+    backdropFilter: 'blur(2px)',
+    boxSizing: 'border-box'
+  },
+  left: {
+    borderRight: '2px solid #000'
+  },
+  right: {
+    borderLeft: '2px solid #000'
+  },
+  disable: {
+    pointerEvents: 'none'
+  },
+  controllerIconWrapper: {
+    padding: theme.spacing(10),
+    borderRadius: theme.spacing(20)
+  },
+  controllerIcon: {
+    color: '#000',
+    transform: 'traslateY(-5%)'
   }
 }));
 
@@ -148,6 +182,55 @@ function SlideMenu({ setIndex, index, slides, classNames }) {
   );
 }
 
+function Controllers({ index, setIndex, slidesCount }) {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.controlers}>
+      <motion.div
+        className={cx(classes.controlerHotZone, classes.left, {
+          [classes.disable]: index === 0
+        })}
+        initial={{
+          opacity: 0
+        }}
+        whileHover={{
+          opacity: index > 0 ? 1 : 0
+        }}
+        onClick={() => {
+          if (index > 0) {
+            setIndex(index - 1);
+          }
+        }}
+      >
+        <div className={classes.controllerIconWrapper}>
+          <PreviousIcon size={62} className={classes.controllerIcon} />
+        </div>
+      </motion.div>
+      <motion.div
+        className={cx(classes.controlerHotZone, classes.right, {
+          [classes.disable]: index === slidesCount - 1
+        })}
+        initial={{
+          opacity: 0
+        }}
+        whileHover={{
+          opacity: index < slidesCount - 1 ? 1 : 0
+        }}
+        onClick={() => {
+          if (index < slidesCount - 1) {
+            setIndex(index + 1);
+          }
+        }}
+      >
+        <div className={classes.controllerIconWrapper}>
+          <NextIcon size={62} className={classes.controllerIcon} />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 function Presentation({
   slides,
   gaCategory,
@@ -155,14 +238,10 @@ function Presentation({
     menuBtn: undefined
   }
 }) {
-  // HOOKS
   const classes = useStyles();
-  const theme = useTheme();
   const [index, setIndex] = useState(0);
-  const [fullScreen, setFullScreen] = useState(false);
   const slideViewStartTime = useRef(new Date().getTime());
 
-  // METHODS
   function preloadImages() {
     const myimages = new Array();
     for (let i = 0; i < slides.length; i++) {
@@ -171,26 +250,9 @@ function Presentation({
     }
   }
 
-  // EFFECTS
   useEffect(() => {
     preloadImages();
   }, []);
-
-  useEffect(() => {
-    if (fullScreen) {
-      document.body.style.overflowY = 'hidden';
-      document.body.style.overflowX = 'hidden';
-      if (gaCategory) {
-        GA.event(gaCategory, 'Enter full screen mode');
-      }
-    } else {
-      document.body.style.overflowX = 'hidden';
-      document.body.style.overflowY = 'auto';
-      if (gaCategory) {
-        GA.event(gaCategory, 'Exit full screen mode');
-      }
-    }
-  }, [fullScreen]);
 
   useEffect(() => {
     const timestamp = new Date().getTime();
@@ -214,9 +276,6 @@ function Presentation({
             spacing={0}
             className={classes.carousel}
             speed={1}
-            // moreControlls={
-            //   <SlideMenu setIndex={setIndex} index={index} slides={slides} />
-            // }
             sliderClassName={classes.slider}
             objectFit='fit'
           >
@@ -229,6 +288,11 @@ function Presentation({
               />
             ))}
           </Carousel>
+          <Controllers
+            index={index}
+            setIndex={setIndex}
+            slidesCount={slides.length}
+          />
         </div>
 
         <SlideMenu
