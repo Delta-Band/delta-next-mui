@@ -6,10 +6,11 @@ import { motion } from 'framer-motion';
 import { Fullscreen as ExpandIcon } from '@styled-icons/remix-line/Fullscreen';
 import cx from 'classnames';
 import { FullscreenExit as ExitIcon } from '@styled-icons/remix-fill/FullscreenExit';
-import { Restart as RestartIcon } from '@styled-icons/remix-line/Restart';
+import { DividerShort as DividerIcon } from '@styled-icons/fluentui-system-regular/DividerShort';
 import Carousel from '../Layout/Carousel';
 import Modal from '../Gadgets/Modal';
 import GA from '../GA';
+import DropMenu from '../Gadgets/DropMenu';
 
 const useStyles = makeStyles((theme) => ({
   presentationRoot: {
@@ -22,13 +23,31 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    '& ::-webkit-scrollbar': {
+      width: 0,
+      height: 0
+    }
+  },
+  carouselContainer: {
+    position: 'relative',
+    width: '100%',
+    maxHeight: 'calc(100% - 50px)',
+    [theme.breakpoints.up('laptop')]: {
+      height: 'calc(100% - 50px)'
+    },
+    [theme.breakpoints.up('desktop')]: {
+      height: 'calc(100% - 60px)'
+    }
   },
   carousel: {
-    maxHeight: '100%'
+    height: '100%'
   },
   slider: {
-    maxHeight: 'calc(100% - 56px)'
+    maxHeight: '100%',
+    [theme.breakpoints.up('laptop')]: {
+      height: '100%'
+    }
   },
   slide: {
     boxSizing: 'border-box',
@@ -36,134 +55,106 @@ const useStyles = makeStyles((theme) => ({
     background: 'white',
     width: '100%',
     maxHeight: '100%',
-    objectFit: 'fit'
+    objectFit: 'fill',
+    [theme.breakpoints.up('laptop')]: {
+      height: '100%'
+    }
   },
   menuRoot: {
     display: 'flex',
-    width: '100%',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    zIndex: 1,
-    paddingRight: theme.spacing(25),
+    width: '100%',
+    overflowY: 'auto',
+    flexShrink: 0,
+    height: 50,
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
     boxSizing: 'border-box',
-    pointerEvents: 'none'
-  },
-  btnTxt: {
-    fontSize: 15,
-    marginRight: theme.spacing(1)
-  },
-  gallery: {
-    width: '80%',
-    marginTop: 18,
-    [theme.breakpoints.up('md')]: {
-      width: '90%'
+    [theme.breakpoints.up('ipad')]: {
+      height: 50
     },
-    [theme.breakpoints.up('lg')]: {
-      width: '80%'
+    [theme.breakpoints.up('laptop')]: {
+      height: 60
     },
-    [theme.breakpoints.up('xl')]: {
-      width: '90%'
+    [theme.breakpoints.up('desktop')]: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2)
+    },
+    [theme.breakpoints.up('widescreen')]: {}
+  },
+  menuItem: {
+    flexShrink: 0,
+    '& .MuiButton-label': {
+      [theme.breakpoints.up('ipad')]: {
+        fontSize: 16
+      }
     }
   },
-  textColor: {
-    color: '#FFF'
+  active: {
+    // color: theme.palette.secondary.main,
+    '& .MuiButton-label': {
+      color: `${theme.palette.secondary.main} !important`
+    }
+  },
+  divider: {
+    flexShrink: 0,
+    mrginLeft: 2,
+    mrginRight: 2,
+    opacity: 0.3,
+    transform: 'translateY(-1px)'
   }
 }));
 
-function SlideMenu() {
+function SlideMenu({ setIndex, index, slides, classNames }) {
   const classes = useStyles();
+  const slidMenuRef = useRef();
+
+  useEffect(() => {
+    if (!slidMenuRef) return;
+    const buttons = Array.from(slidMenuRef.current.children).filter(
+      (child) => child.type === 'button'
+    );
+    const offsetLeft = buttons[index].offsetLeft;
+    slidMenuRef.current.scroll({ left: offsetLeft - 50, behavior: 'smooth' });
+  }, [index]);
 
   return (
-    <div className={classes.menuRoot}>
-      <Typography className={classes.textColor}>Slide Menu</Typography>
+    <div className={classes.menuRoot} ref={slidMenuRef}>
+      {slides.map((slide, i) => (
+        <>
+          <Button
+            key={i}
+            className={cx(classes.menuItem, classNames.menuBtn, {
+              [classes.active]: index === i
+            })}
+            key={i}
+            size='small'
+            onClick={() => {
+              setIndex(i);
+            }}
+          >
+            {slide.label}
+          </Button>
+          {i < slides.length - 1 && (
+            <DividerIcon
+              size={26}
+              color
+              className={cx(classes.divider, classNames.menuBtn)}
+            />
+          )}
+        </>
+      ))}
     </div>
   );
 }
 
-function Tools({ setFullScreen, onRestart, isFullScreen }) {
-  // HOOKS
-  const classes = useStyles();
-  const theme = useTheme();
-  const upSm = useMediaQuery(theme.breakpoints.up('sm'));
-
-  return (
-    <motion.div
-      className={classes.toolsRoot}
-      animate={{
-        opacity: 1
-      }}
-      transition={{
-        delay: 1
-      }}
-    >
-      <SlideMenu />
-      {/* <div>
-        <IconButton
-          color='secondary'
-          onClick={() => {
-            setFullScreen(!isFullScreen);
-          }}
-        >
-          {isFullScreen ? <ExitIcon size={32} /> : <ExpandIcon size={32} />}
-        </IconButton>
-        <IconButton color='secondary' onClick={onRestart}>
-          <RestartIcon size={26} />
-        </IconButton>
-      </div> */}
-    </motion.div>
-  );
-}
-
-function SlideManager({
+function Presentation({
   slides,
-  index,
-  setIndex,
-  setFullScreen,
   gaCategory,
-  fullScreen
+  classNames = {
+    menuBtn: undefined
+  }
 }) {
-  const classes = useStyles();
-
-  return (
-    <>
-      {/* <Tools
-        setFullScreen={setFullScreen}
-        isFullScreen={fullScreen}
-        onRestart={() => {
-          setIndex(0);
-          if (gaCategory) {
-            GA.event(gaCategory, 'Used Restart button');
-          }
-        }}
-      /> */}
-      <Carousel
-        visibleItems={1}
-        forceControls
-        controllsOnTop
-        forceIndex={index}
-        onChange={setIndex}
-        spacing={0}
-        className={classes.carousel}
-        // speed={0}
-        moreControlls={<SlideMenu />}
-        sliderClassName={classes.slider}
-        objectFit='fit'
-      >
-        {slides.map((slide, i) => (
-          <img
-            src={slide.image}
-            key={i}
-            className={classes.slide}
-            draggable='false'
-          />
-        ))}
-      </Carousel>
-    </>
-  );
-}
-
-function Presentation({ slides, gaCategory }) {
   // HOOKS
   const classes = useStyles();
   const theme = useTheme();
@@ -213,31 +204,40 @@ function Presentation({ slides, gaCategory }) {
   return (
     <>
       <div className={classes.presentationRoot}>
-        <SlideManager
-          slides={slides}
-          index={index}
+        <div className={classes.carouselContainer}>
+          <Carousel
+            visibleItems={1}
+            hideControls
+            controllsOnTop
+            forceIndex={index}
+            onChange={setIndex}
+            spacing={0}
+            className={classes.carousel}
+            speed={1}
+            // moreControlls={
+            //   <SlideMenu setIndex={setIndex} index={index} slides={slides} />
+            // }
+            sliderClassName={classes.slider}
+            objectFit='fit'
+          >
+            {slides.map((slide, i) => (
+              <img
+                src={slide.image}
+                key={i}
+                className={classes.slide}
+                draggable='false'
+              />
+            ))}
+          </Carousel>
+        </div>
+
+        <SlideMenu
           setIndex={setIndex}
-          setFullScreen={setFullScreen}
-          gaCategory={gaCategory}
+          index={index}
+          slides={slides}
+          classNames={classNames}
         />
       </div>
-      {/* <Modal
-        show={fullScreen}
-        backdropOpacity={1}
-        fullScreen
-        classNames={{
-          modal: classes.gallery
-        }}
-      >
-        <SlideManager
-          slides={slides}
-          index={index}
-          setIndex={setIndex}
-          setFullScreen={setFullScreen}
-          gaCategory={gaCategory}
-          fullScreen
-        />
-      </Modal> */}
     </>
   );
 }

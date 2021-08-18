@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100vw',
     height: '100%',
     background: 'rgba(0, 0, 0, 0.6)',
-    zIndex: 1
+    zIndex: 2
   },
   menu: {
     position: 'absolute',

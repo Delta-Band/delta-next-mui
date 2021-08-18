@@ -61,7 +61,7 @@ const MOTION_VARIANTS = {
   }
 };
 
-function CarouselItem({ children, itemWidth, spacing }) {
+function CarouselItem({ children, itemWidth, spacing, noFade }) {
   const [targetRef, visible] = useVisible();
   const classes = useStyles();
 
@@ -70,10 +70,14 @@ function CarouselItem({ children, itemWidth, spacing }) {
       ref={targetRef}
       className={cx(classes.item, { [classes.disableChildren]: visible < 0.9 })}
       animate={{
-        opacity: visible <= 0.6 ? 0.4 : 1,
-        filter: visible <= 0.6 ? 'grayscale(1)' : 'grayscale(0)',
+        opacity: noFade ? 1 : visible <= 0.6 ? 0.4 : 1,
+        filter: noFade
+          ? 'grayscale(0)'
+          : visible <= 0.6
+          ? 'grayscale(1)'
+          : 'grayscale(0)',
         transition: {
-          duration: visible <= 0.6 ? 0.2 : 0
+          duration: noFade ? 0 : visible <= 0.6 ? 0.2 : 0
         }
       }}
       style={{
@@ -174,6 +178,7 @@ export default function Carousel({
   forceIndex = 0,
   gaCategory,
   forceControls = false,
+  hideControls = false,
   controllsOnTop = false,
   onItemWidthChange = () => {},
   controlsColor,
@@ -321,7 +326,7 @@ export default function Carousel({
 
   return (
     <div className={cx(classes.root, className)} ref={myRef}>
-      {controllsOnTop && (upMd || forceControls) && (
+      {!hideControls && controllsOnTop && (upMd || forceControls) && (
         <Controlls
           onSwipedRight={onSwipedRight}
           index={index}
@@ -345,12 +350,17 @@ export default function Carousel({
         }}
       >
         {children.map((child, i) => (
-          <CarouselItem key={i} spacing={spacing} itemWidth={itemWidth}>
+          <CarouselItem
+            key={i}
+            spacing={spacing}
+            noFade={visibleItems === 1}
+            itemWidth={itemWidth}
+          >
             {child}
           </CarouselItem>
         ))}
       </motion.div>
-      {!controllsOnTop && (upMd || forceControls) && (
+      {!hideControls && !controllsOnTop && (upMd || forceControls) && (
         <Controlls
           onSwipedRight={onSwipedRight}
           index={index}

@@ -11,7 +11,7 @@ const theme = createMuiTheme({
       md: 960,
       lg: 1280,
       xl: 1920,
-      ipad: 765,
+      ipad: 768,
       laptop: 1024,
       desktop: 1280,
       widescreen: 1920
