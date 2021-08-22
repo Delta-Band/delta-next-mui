@@ -68,7 +68,7 @@ const AccordionSummary = withStyles({
   expanded: {},
   expandIcon: {
     marginRight: -6,
-    marginLeft: -20,
+    marginLeft: -10,
     '&$expanded': {
       transform: 'rotate(90deg)'
     }
@@ -78,7 +78,7 @@ const AccordionSummary = withStyles({
 const AccordionDetails = withStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(0),
-    paddingLeft: theme.spacing(4.5),
+    paddingLeft: 46,
     paddingRight: theme.spacing(2),
     flexDirection: 'column'
   }
