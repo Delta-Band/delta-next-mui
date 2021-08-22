@@ -95,8 +95,10 @@ function Item({
       layout
       initial={false}
       className={classes.sortableItem}
-      animate={isDragging ? onTop : flat}
-      whileTap={{ borderColor: theme.palette.primary.main }}
+      style={{
+        zIndex: isDragging ? 1 : 0
+      }}
+      // whileTap={{ borderColor: theme.palette.primary.main }}
       drag='y'
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={1}
