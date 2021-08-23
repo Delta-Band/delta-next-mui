@@ -91,6 +91,7 @@ function Item({
 
   return (
     <motion.li
+      layout
       ref={ref}
       layout
       initial={false}
@@ -98,7 +99,7 @@ function Item({
       style={{
         zIndex: isDragging ? 1 : 0
       }}
-      // whileTap={{ borderColor: theme.palette.primary.main }}
+      whileTap={{ borderColor: theme.palette.primary.main }}
       drag='y'
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={1}
@@ -130,6 +131,7 @@ function Sortable({ items = [], itemBuilder, onChange }) {
   }
 
   function moveItem(i, dragOffset) {
+    console.log(positions[0].top);
     const listOffset = ref.current.offsetTop;
     const targetIndex = findIndex(i, dragOffset - listOffset, positions);
     if (targetIndex !== i) {
@@ -138,22 +140,20 @@ function Sortable({ items = [], itemBuilder, onChange }) {
   }
 
   return (
-    <AnimateSharedLayout>
-      <motion.ul className={classes.sortableRoot} layout ref={ref}>
-        {_items.map((item, i) => (
-          <Item
-            key={item.id}
-            i={i}
-            item={item}
-            setPosition={setPosition}
-            moveItem={moveItem}
-            itemBuilder={itemBuilder}
-            order={_items}
-            onChange={onChange}
-          />
-        ))}
-      </motion.ul>
-    </AnimateSharedLayout>
+    <ul className={classes.sortableRoot} ref={ref}>
+      {_items.map((item, i) => (
+        <Item
+          key={item.id}
+          i={i}
+          item={item}
+          setPosition={setPosition}
+          moveItem={moveItem}
+          itemBuilder={itemBuilder}
+          order={_items}
+          onChange={onChange}
+        />
+      ))}
+    </ul>
   );
 }
 
