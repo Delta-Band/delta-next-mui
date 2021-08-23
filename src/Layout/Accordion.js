@@ -68,7 +68,7 @@ const AccordionSummary = withStyles({
   expanded: {},
   expandIcon: {
     marginRight: -6,
-    marginLeft: -10,
+    marginLeft: -5,
     transformOrigin: 'center center',
     '&$expanded': {
       transform: 'rotate(90deg) translateX(-1px)'

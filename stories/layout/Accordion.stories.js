@@ -16,7 +16,7 @@ export default {
 };
 
 const Template = (args) => (
-  <div style={{ height: '200vh', width: '80vw' }}>
+  <div style={{ height: '200vh', width: '80vw', padding: 20 }}>
     <Accordion {...args} />
   </div>
 );
