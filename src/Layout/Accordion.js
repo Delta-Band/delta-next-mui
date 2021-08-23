@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { ChevronRight } from '@styled-icons/boxicons-regular/ChevronRight';
+import { ChevronRight } from '@styled-icons/heroicons-outline/ChevronRight';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import {
@@ -69,8 +69,9 @@ const AccordionSummary = withStyles({
   expandIcon: {
     marginRight: -6,
     marginLeft: -10,
+    transformOrigin: 'center center',
     '&$expanded': {
-      transform: 'rotate(90deg)'
+      transform: 'rotate(90deg) translateX(-1px)'
     }
   }
 })(MuiAccordionSummary);
@@ -120,7 +121,7 @@ function DeltaAccordion({ content = [], onChange, forceOpen }) {
         className={classes.accordion}
       >
         <AccordionSummary
-          expandIcon={<ChevronRight size={38} />}
+          expandIcon={<ChevronRight size={26} />}
           className={cx({ [classes.subItemSummary]: isSubItem })}
           id={i}
           aria-controls={i}
