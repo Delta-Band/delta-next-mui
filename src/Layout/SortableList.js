@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     border: '2px solid',
     borderColor: 'transparent',
+    overflow: 'hidden',
     '&.sortable-gost': {
       borderColor: theme.palette.primary.main
     }
@@ -73,11 +74,11 @@ function Item({
   );
 }
 
-function Sortable({
+function SortableList({
   items = [],
   itemBuilder,
   onChange = console.log,
-  itemRadius = 4
+  itemRadius = 7
 }) {
   const classes = useStyles();
   const [_items, setItems] = useState(items);
@@ -124,4 +125,4 @@ function Sortable({
   );
 }
 
-export default Sortable;
+export default SortableList;
