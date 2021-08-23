@@ -73,7 +73,12 @@ function Item({
   );
 }
 
-function Sortable({ items = [], itemBuilder, onChange = console.log }) {
+function Sortable({
+  items = [],
+  itemBuilder,
+  onChange = console.log,
+  itemRadius = 4
+}) {
   const classes = useStyles();
   const [_items, setItems] = useState(items);
   const ref = useRef(null);
@@ -107,7 +112,11 @@ function Sortable({ items = [], itemBuilder, onChange = console.log }) {
       ghostClass='sortable-gost'
     >
       {_items.map((item) => (
-        <div key={item.id} className={classes.sortableItem}>
+        <div
+          key={item.id}
+          className={classes.sortableItem}
+          style={{ borderRadius: itemRadius }}
+        >
           {itemBuilder(item)}
         </div>
       ))}
