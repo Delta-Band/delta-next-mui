@@ -2,9 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { ReactSortable } from 'react-sortablejs';
 import isEqual from 'lodash/isEqual';
-import { motion, AnimateSharedLayout, AnimatePresence } from 'framer-motion';
-import move from 'array-move';
-import { clamp } from '@popmotion/popcorn';
 
 const useStyles = makeStyles((theme) => ({
   sortableRoot: {
@@ -20,59 +17,17 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid',
     borderColor: 'transparent',
     overflow: 'hidden',
-    '&.sortable-gost': {
+    // '&.sortable-ghost': {
+    //   borderColor: theme.palette.primary.main
+    // }
+    '&.sortable-chosen': {
       borderColor: theme.palette.primary.main
+    },
+    '&.sortable-drag': {
+      borderColor: 'transparent'
     }
   }
 }));
-
-function Item({
-  item,
-  i,
-  setPosition,
-  moveItem,
-  itemBuilder,
-  order,
-  onChange
-}) {
-  const ref = useRef(null);
-  const theme = useTheme();
-  const [isDragging, setDragging] = useState(false);
-  const classes = useStyles();
-
-  useEffect(() => {
-    const cords = getCoords(ref.current);
-    setPosition(i, {
-      height: ref.current.offsetHeight,
-      top: cords.top
-    });
-  });
-
-  return (
-    <motion.li
-      layout
-      ref={ref}
-      layout
-      initial={false}
-      className={classes.sortableItem}
-      style={{
-        zIndex: isDragging ? 1 : 0
-      }}
-      whileTap={{ borderColor: theme.palette.primary.main }}
-      drag='y'
-      dragConstraints={{ top: 0, bottom: 0 }}
-      dragElastic={1}
-      onDragStart={() => setDragging(true)}
-      onDragEnd={() => {
-        setDragging(false);
-        onChange(order);
-      }}
-      onDrag={(e, { point }) => moveItem(i, point.y)}
-    >
-      {itemBuilder(item)}
-    </motion.li>
-  );
-}
 
 function SortableList({
   items = [],
@@ -83,6 +38,7 @@ function SortableList({
   const classes = useStyles();
   const [_items, setItems] = useState(items);
   const ref = useRef(null);
+  const theme = useTheme();
   const idList = useRef(_items.map((item) => item.id));
 
   useEffect(() => {
@@ -110,7 +66,7 @@ function SortableList({
       animation={200}
       delayOnTouchStart={true}
       delay={2}
-      ghostClass='sortable-gost'
+      ghostClass='sortable-ghost'
     >
       {_items.map((item) => (
         <div
