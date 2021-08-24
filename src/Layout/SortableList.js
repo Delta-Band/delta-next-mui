@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     border: '2px solid',
     borderColor: 'transparent',
-    overflow: 'hidden',
     // '&.sortable-ghost': {
     //   borderColor: theme.palette.primary.main
     // }
