@@ -14,13 +14,14 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     width: '100%',
     position: 'relative',
-    border: '2px solid',
-    borderColor: 'transparent',
+    marginBottom: 4,
+    // borderColor: 'transparent',
+    boxSizing: 'border-box',
     // '&.sortable-ghost': {
     //   borderColor: theme.palette.primary.main
     // }
     '&.sortable-chosen': {
-      borderColor: theme.palette.primary.main
+      // borderColor: theme.palette.primary.main
     },
     '&.sortable-drag': {
       borderColor: 'transparent'
