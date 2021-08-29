@@ -191,7 +191,7 @@ function Footer({
         container
         spacing={4}
         direction='row'
-        justify='space-between'
+        justifyContent='space-between'
         alignItems='flex-start'
         style={{
           maxWidth: maxWidth
