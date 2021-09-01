@@ -42,6 +42,8 @@ function SortableList({
   const idList = useRef(_items.map((item) => item.id));
 
   useEffect(() => {
+    const notChanged = isEqual(items, _items);
+    if (notChanged) return;
     setItems(items);
     idList.current = items.map((item) => item.id);
   }, [items]);
