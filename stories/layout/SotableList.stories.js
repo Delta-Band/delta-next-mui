@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
 const Template = (args) => {
   const classes = useStyles();
   const [items, setItems] = useState([
-    { text: 'red', color: 'red', id: 10 },
-    { text: 'green', color: 'green', id: 11 },
-    { text: 'blue', color: 'blue', id: 12 },
-    { text: 'yellow', color: 'yellow', id: 13 }
+    { text: 'red', color: 'red', id: '10' },
+    { text: 'green', color: 'green', id: '11' },
+    { text: 'blue', color: 'blue', id: '12' },
+    { text: 'yellow', color: 'yellow', id: '13' }
   ]);
 
   return (

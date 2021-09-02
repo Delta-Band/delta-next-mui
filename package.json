@@ -1,6 +1,6 @@
 {
   "name": "@deltaband/delta-next-mui",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
@@ -36,13 +36,13 @@
     "react-browser-hooks": "^2.2.4",
     "react-dom": "^17.0.1",
     "react-intersection-observer": "^8.31.0",
-    "react-pdf": "^5.3.2",
     "react-render-html": "^0.6.0",
     "react-swipeable": "^6.0.1",
     "resize-observer-polyfill": "^1.5.1",
     "styled-components": "^5.3.0",
     "styled-icons": "^10.33.0",
-    "use-click-outside": "^2.0.0"
+    "use-click-outside": "^2.0.0",
+    "react-beautiful-dnd": "^13.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -103,13 +103,8 @@
   },
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
-    "array-move": "^3.0.1",
-    "immutable": "^4.0.0-rc.14",
     "popmotion": "^9.4.0",
     "react-ga": "^3.3.0",
-    "react-pdf": "^5.3.2",
-    "react-sortablejs": "^6.0.0",
-    "screenfull": "^5.1.0",
-    "sortablejs": "^1.14.0"
+    "screenfull": "^5.1.0"
   }
 }
