@@ -78,21 +78,6 @@ const Template = (args) => {
 };
 
 export const Default = Template.bind({});
-Default.args = {
-  itemBuilder: (item) => (
-    <div
-      style={{
-        backgroundColor: item.color,
-        padding: 10,
-        // marginBottom: 2,
-        height: 100
-      }}
-    >
-      <Typography>{item.text}</Typography>
-    </div>
-  ),
-  onChange: console.log
-};
 
 Default.parameters = {
   viewport: {
