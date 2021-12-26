@@ -85,7 +85,12 @@ const AccordionDetails = withStyles((theme) => ({
   }
 }))(MuiAccordionDetails);
 
-function DeltaAccordion({ content = [], onChange, forceOpen }) {
+function DeltaAccordion({
+  content = [],
+  onChange,
+  forceOpen,
+  unmountContentWhenHidden = false
+}) {
   const classes = useStyles();
   const theme = useTheme();
   const [expanded, setExpanded] = useState(forceOpen || '0');
@@ -115,6 +120,7 @@ function DeltaAccordion({ content = [], onChange, forceOpen }) {
   function accordionItem(item, isSubItem = false, i) {
     return (
       <Accordion
+        TransitionProps={{ unmountOnExit: unmountContentWhenHidden }}
         key={i}
         expanded={expandedArray().includes(i)}
         onChange={handleChange(i, item)}

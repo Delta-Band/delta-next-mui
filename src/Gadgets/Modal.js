@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { default as _disableScroll } from 'disable-scroll';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   screenCover: {
     position: 'fixed',
     left: 0,
@@ -35,7 +35,8 @@ export default function DeltaModal({
   fullScreen = false,
   backDropColor = 'rgba(0, 0, 0, 0.8)',
   onEnterKeyPress,
-  disableScroll = true
+  disableScroll = true,
+  clickOutsideToClose = true
 }) {
   const classes = useStyles();
   const { Portal } = usePortal();
@@ -114,7 +115,7 @@ export default function DeltaModal({
                   when: 'afterChildren'
                 }
               }}
-              onClick={onClose}
+              onClick={clickOutsideToClose ? onClose : undefined}
             >
               <motion.div
                 onClick={onClose}
@@ -131,7 +132,7 @@ export default function DeltaModal({
                   opacity: 0,
                   scale: 0
                 }}
-                onClick={(e) => e.stopPropagation()}
+                onClick={e => e.stopPropagation()}
               >
                 {children}
               </motion.div>
