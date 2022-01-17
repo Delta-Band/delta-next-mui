@@ -11,3 +11,5 @@ export { default as KeyFrameService } from './Layout/key-frame/keyframe.store';
 export { default as Footer } from './Layout/Footer';
 export { default as Presentation } from './Products/Presentation';
 export { default as SortableList } from './Layout/SortableList';
+export { default as Reader } from './Gadgets/Reader';
+export { default as Iframe } from './Gadgets/Iframe';
