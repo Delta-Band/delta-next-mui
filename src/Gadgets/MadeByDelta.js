@@ -61,7 +61,7 @@ function GridElement({ children }) {
   );
 }
 
-export default function MadeByDelta() {
+export default function MadeByDelta({ className }) {
   const classes = useStyles();
   // const theme = useTheme();
   // const upXS = useMediaQuery(theme.breakpoints.up('xs'));
@@ -69,7 +69,7 @@ export default function MadeByDelta() {
   return (
     <Grid
       container
-      className={classes.root}
+      className={cx(classes.root, className)}
       spacing={2}
       direction='row'
       justify='space-between'
