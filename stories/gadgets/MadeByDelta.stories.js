@@ -12,7 +12,7 @@ export default {
 };
 
 const Template = args => (
-  <div style={{ height: '200vh', background: 'black' }}>
+  <div style={{ background: 'black' }}>
     <MadeByDelta {...args} />
   </div>
 );

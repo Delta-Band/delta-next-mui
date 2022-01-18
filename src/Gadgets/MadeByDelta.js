@@ -5,11 +5,10 @@ import { motion } from 'framer-motion';
 // import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link as MuiLink, Grid } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     padding: '20px 0',
     color: '#FFF',
-    marginTop: theme.spacing(5),
     maxWidth: 440,
     margin: '0 auto',
     [theme.breakpoints.up('xs')]: {
@@ -56,12 +55,7 @@ function GridElement({ children }) {
   const classes = useStyles();
 
   return (
-    <Grid
-      item
-      // xs={12}
-      // sm={6}
-      className={cx(classes.textStyle)}
-    >
+    <Grid item xs={12} sm={6} className={cx(classes.textStyle)}>
       {children}
     </Grid>
   );
