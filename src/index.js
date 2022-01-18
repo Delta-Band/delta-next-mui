@@ -13,3 +13,4 @@ export { default as Presentation } from './Products/Presentation';
 export { default as SortableList } from './Layout/SortableList';
 export { default as Reader } from './Gadgets/Reader';
 export { default as Iframe } from './Gadgets/Iframe';
+export { default as MadeByDelta } from './Gadgets/MadeByDelta';
