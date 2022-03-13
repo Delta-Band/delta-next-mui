@@ -11,6 +11,12 @@ export default {
   parameters: {
     viewport: INITIAL_VIEWPORTS,
     defaultViewport: 'iphone6'
+  },
+  argTypes: {
+    disabled: {
+      options: [true, false],
+      control: { type: 'radio' }
+    }
   }
 };
 
@@ -36,8 +42,8 @@ const Template = args => {
   return (
     <div className={classes.page}>
       <SortableList
+        {...args}
         items={items}
-        sort={true}
         itemBuilder={item => (
           <div
             style={{
@@ -84,4 +90,8 @@ Default.parameters = {
   viewport: {
     defaultViewport: 'iphone6'
   }
+};
+
+Default.args = {
+  disabled: false
 };

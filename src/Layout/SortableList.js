@@ -38,7 +38,7 @@ function SortableList({
   items = [],
   itemBuilder,
   onChange = console.log,
-  sort = true
+  disabled = false
 }) {
   const classes = useStyles();
   const listRef = useRef();
@@ -47,9 +47,9 @@ function SortableList({
   const sortable = useRef(null);
 
   useEffect(() => {
-    if (!sortable) return;
     sortable.current = new Sortable(listRef.current, {
-      sort,
+      sort: true,
+      disabled,
       animation: 300,
       onEnd: evt => {
         if (evt.newIndex === evt.oldIndex) return;
@@ -75,7 +75,12 @@ function SortableList({
         onChange(newOrder);
       }
     });
-  }, [sort, sortable]);
+  }, []);
+
+  useEffect(() => {
+    if (!sortable) return;
+    sortable.current.option('disabled', disabled);
+  }, [sortable, disabled]);
 
   useEffect(() => {
     setItems(items);
