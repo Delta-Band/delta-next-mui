@@ -47,6 +47,7 @@ function SortableList({
   const sortable = useRef(null);
 
   useEffect(() => {
+    if (!sortable) return;
     sortable.current = new Sortable(listRef.current, {
       sort,
       animation: 300,
@@ -74,7 +75,7 @@ function SortableList({
         onChange(newOrder);
       }
     });
-  }, []);
+  }, [sort, sortable]);
 
   useEffect(() => {
     setItems(items);
