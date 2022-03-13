@@ -14,7 +14,7 @@ export default {
   }
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   page: {
     minHeight: '100vh',
     width: '100%',
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Template = (args) => {
+const Template = args => {
   const classes = useStyles();
   const [items, setItems] = useState([
     { text: 'red', color: 'red', id: '10' },
@@ -37,7 +37,8 @@ const Template = (args) => {
     <div className={classes.page}>
       <SortableList
         items={items}
-        itemBuilder={(item) => (
+        sort={true}
+        itemBuilder={item => (
           <div
             style={{
               backgroundColor: item.color,

@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // import isEqual from 'lodash/isEqual';
 import Sortable from 'sortablejs';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   sortableRoot: {
     listStyle: 'none',
     padding: 0,
@@ -34,7 +34,12 @@ function DragableItem({ children }) {
   return <li className={cx(classes.sortableItem)}>{children}</li>;
 }
 
-function SortableList({ items = [], itemBuilder, onChange = console.log }) {
+function SortableList({
+  items = [],
+  itemBuilder,
+  onChange = console.log,
+  sort = true
+}) {
   const classes = useStyles();
   const listRef = useRef();
   const [_items, setItems] = useState(items);
@@ -43,9 +48,9 @@ function SortableList({ items = [], itemBuilder, onChange = console.log }) {
 
   useEffect(() => {
     sortable.current = new Sortable(listRef.current, {
-      sort: true,
+      sort,
       animation: 300,
-      onEnd: (evt) => {
+      onEnd: evt => {
         if (evt.newIndex === evt.oldIndex) return;
         let newOrder;
         if (evt.newIndex > evt.oldIndex) {
@@ -78,7 +83,7 @@ function SortableList({ items = [], itemBuilder, onChange = console.log }) {
 
   return (
     <ul ref={listRef} className={classes.sortableRoot}>
-      {_items.map((itm) => (
+      {_items.map(itm => (
         <DragableItem key={itm.id}>{itemBuilder(itm)}</DragableItem>
       ))}
     </ul>
